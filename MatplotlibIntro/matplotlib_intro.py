@@ -149,18 +149,20 @@ def prob6():
     X, Y = np.meshgrid(x,y)
     plt.subplot(121)
     Z = (np.sin(X) * np.sin(Y))/(X*Y)
-    plt.pcolormesh(X, Y, Z)
+    plt.pcolormesh(X, Y, Z, cmap = "nipy_spectral")
+    plt.colorbar()
 
     plt.subplot(122)
-    plt.contour(X,Y,Z)
+    plt.contour(X,Y,Z, 100, cmap = "gnuplot")
+    plt.colorbar()
 
     plt.show()
 
 if __name__ == "__main__":
-    prob1()
+    '''prob1()
     prob2()
     prob3()
     prob4()
-    prob5()
+    prob5()'''
     prob6()
 
