@@ -4,7 +4,9 @@
 <Class>
 <Date>
 """
-
+import numpy as np
+from matplotlib import pyplot as plt
+from numpy.core.fromnumeric import mean, var
 
 # Problem 1
 def var_of_means(n):
@@ -18,13 +20,20 @@ def var_of_means(n):
     Returns:
         (float) The variance of the means of each row.
     """
-    raise NotImplementedError("Problem 1 Incomplete")
+    A = np.random.normal(size = (n,n))
+    rows = np.mean(A, axis = 1)
+    #print(rows)
+    return np.var(rows)
 
 def prob1():
     """Create an array of the results of var_of_means() with inputs
     n = 100, 200, ..., 1000. Plot and show the resulting array.
     """
-    raise NotImplementedError("Problem 1 Incomplete")
+    nums = [i for i in range(100,1001,100)]
+    means_array = [var_of_means(n) for n in nums]
+    plt.plot(nums, means_array)
+    plt.show()
+
 
 
 # Problem 2
@@ -33,7 +42,14 @@ def prob2():
     [-2pi, 2pi]. Make sure the domain is refined enough to produce a figure
     with good resolution.
     """
-    raise NotImplementedError("Problem 2 Incomplete")
+    domain = np.linspace(-1*np.pi, np.pi, 1000)
+    sine = np.sin(domain)
+    cosine = np.cos(domain)
+    arctangent = np.arctan(domain)
+    plt.plot(domain, sine)
+    plt.plot(domain, cosine)
+    plt.plot(domain, arctangent)
+    plt.show()
 
 
 # Problem 3
@@ -44,7 +60,14 @@ def prob3():
         3. Set the range of the x-axis to [-2,6] and the range of the
            y-axis to [-6,6].
     """
-    raise NotImplementedError("Problem 3 Incomplete")
+    domain1 = np.linspace(-2,1,500)
+    domain2 = np.linspace(1,6,500)
+    plt.plot(domain1, 1/(domain1 - 1), "m--", linewidth = 4)
+    plt.plot(domain2, 1/(domain2 - 1), "m--", linewidth = 4)
+    plt.xlim(-2,6)
+    plt.ylim(-6,6)
+    plt.show()
+
 
 
 # Problem 4
@@ -61,7 +84,26 @@ def prob4():
              2sin(x): blue dashed line.
             2sin(2x): magenta dotted line.
     """
-    raise NotImplementedError("Problem 4 Incomplete")
+    domain = np.linspace(0,2*np.pi)
+    plt.subplot(221)
+    plt.plot(domain, np.sin(domain), 'g-')
+    plt.axis([0,2*np.pi,-2,2])
+    
+    plt.subplot(222)
+    plt.plot(domain, np.sin(2*domain), 'r--')
+    plt.axis([0,2*np.pi,-2,2])
+    
+    plt.subplot(223)
+    plt.plot(domain, 2*np.sin(domain), 'b--')
+    plt.axis([0,2*np.pi,-2,2])
+    
+    plt.subplot(224)
+    plt.plot(domain, 2*np.sin(2*domain), 'm:')
+    plt.axis([0,2*np.pi,-2,2])
+
+    plt.show()
+
+
 
 
 # Problem 5
@@ -74,7 +116,21 @@ def prob5():
         2. A histogram of the hours of the day, with one bin per hour.
             Label and set the limits of the x-axis.
     """
-    raise NotImplementedError("Problem 5 Incomplete")
+    FARS = np.load("FARS.npy")
+    #print(FARS)
+    long = FARS[:,1]
+    #print(long)
+    lat = FARS[:,2]
+    hours = FARS[:,0]
+    plt.subplot(121)
+    plt.plot(long, lat, 'k,')
+    plt.xlabel("Longitude")
+    plt.ylabel("Latitude")
+    plt.axis("equal")
+
+    plt.subplot(122)
+    plt.hist(hours, bins = 24, range = [0,23])
+    plt.show()
 
 
 # Problem 6
@@ -88,4 +144,23 @@ def prob6():
         3. Choose a non-default color scheme.
         4. Add a colorbar to each subplot.
     """
-    raise NotImplementedError("Problem 6 Incomplete")
+    x = np.linspace(-2*np.pi, 2*np.pi, 100)
+    y = x.copy()
+    X, Y = np.meshgrid(x,y)
+    plt.subplot(121)
+    Z = (np.sin(X) * np.sin(Y))/(X*Y)
+    plt.pcolormesh(X, Y, Z)
+
+    plt.subplot(122)
+    plt.contour(X,Y,Z)
+
+    plt.show()
+
+if __name__ == "__main__":
+    prob1()
+    prob2()
+    prob3()
+    prob4()
+    prob5()
+    prob6()
+
