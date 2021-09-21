@@ -6,6 +6,9 @@
 """
 
 from random import random
+import numpy as np
+from matplotlib import pyplot as plt
+import time
 
 
 # Problem 1
@@ -18,6 +21,8 @@ def stretch(A, a, b):
         a (float): scaling factor in the x direction.
         b (float): scaling factor in the y direction.
     """
+    STRETCH = np.array([[a,0],[0,b]])
+    return STRETCH @ A
     raise NotImplementedError("Problem 1 Incomplete")
 
 def shear(A, a, b):
@@ -29,7 +34,7 @@ def shear(A, a, b):
         a (float): scaling factor in the x direction.
         b (float): scaling factor in the y direction.
     """
-    raise NotImplementedError("Problem 1 Incomplete")
+    return np.array([[1,a],[b,1]]) @ A
 
 def reflect(A, a, b):
     """Reflect the points in A about the line that passes through the origin
@@ -40,7 +45,7 @@ def reflect(A, a, b):
         a (float): x-coordinate of a point on the reflecting line.
         b (float): y-coordinate of the same point on the reflecting line.
     """
-    raise NotImplementedError("Problem 1 Incomplete")
+    return ((1/a**2 + b**2) * np.array([[a**2 - b**2, 2*a*b],[2*a*b, b**2 - a**2]])) @ A
 
 def rotate(A, theta):
     """Rotate the points in A about the origin by theta radians.
@@ -49,11 +54,11 @@ def rotate(A, theta):
         A ((2,n) ndarray): Array containing points in R2 stored as columns.
         theta (float): The rotation angle in radians.
     """
-    raise NotImplementedError("Problem 1 Incomplete")
+    return np.array([[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]]) @ A
 
 
 # Problem 2
-def solar_system(T, omega_e, omega_m):
+def solar_system(T, x_e, x_m, omega_e, omega_m):
     """Plot the trajectories of the earth and moon over the time interval [0,T]
     assuming the initial position of the earth is (x_e,0) and the initial
     position of the moon is (x_m,0).
@@ -65,7 +70,17 @@ def solar_system(T, omega_e, omega_m):
         omega_e (float): The earth's angular velocity.
         omega_m (float): The moon's angular velocity.
     """
-    raise NotImplementedError("Problem 2 Incomplete")
+    P_e0 = np.array([x_e, 0])
+    #print(P_e0)
+    P_m0 = np.array([x_m, 0])
+    times = np.linspace(0,T,500)
+    positions_E = np.array([rotate(P_e0, time*omega_e) for time in times])
+    positions_M = np.array([rotate(P_m0-P_e0, times[t]*omega_m) + positions_E[t] for t in range(len(times))])
+    plt.plot(positions_E[:,0], positions_E[:,1])
+    plt.plot(positions_M[:,0], positions_M[:,1])
+    plt.axis([min(positions_M[:,0])-1,max(positions_M[:,0])+1,min(positions_M[:,1])-1,max(positions_M[:,1])+1])
+    plt.gca().set_aspect("equal")
+    plt.show()
 
 
 def random_vector(n):
@@ -101,7 +116,36 @@ def prob3():
     that your figure accurately describes the growth, but avoid values of n
     that lead to execution times of more than 1 minute.
     """
-    raise NotImplementedError("Problem 3 Incomplete")
+    domain = 2**np.arange(1,10)
+    matrix_vector_times = []
+    matrix_matrix_times = []
+    for n in domain:
+        A = random_matrix(n)
+        B = random_matrix(n)
+        x = random_vector(n)
+        start_time = time.time()
+        matrix_matrix_product(A,B)
+        end_time = time.time()
+        matrix_matrix_times.append(end_time - start_time)
+
+        start_time = time.time()
+        matrix_vector_product(A,x)
+        end_time = time.time()
+        matrix_vector_times.append(end_time - start_time)
+    
+    plt.subplot(121)
+    plt.plot(domain, matrix_vector_times)
+    plt.title("Matrix-Vector Multiplication")
+    plt.ylabel("Seconds")
+    plt.xlabel("n")
+    
+    plt.subplot(122)
+    plt.plot(domain, matrix_matrix_times)
+    plt.title("Matrix-Matrix Multiplication")
+    plt.ylabel("Seconds")
+    plt.xlabel("n")
+
+    plt.show()
 
 
 # Problem 4
@@ -112,4 +156,75 @@ def prob4():
     four sets of execution times on a regular linear scale, and one with all
     four sets of exections times on a log-log scale.
     """
+    domain = 2**np.arange(1,10)
+    matrix_vector_times = []
+    matrix_matrix_times = []
+    np_dot_matrix_times = []
+    np_dot_vector_times = []
+    for n in domain:
+        A = random_matrix(n)
+        B = random_matrix(n)
+        x = random_vector(n)
+        start_time = time.time()
+        matrix_matrix_product(A,B)
+        end_time = time.time()
+        matrix_matrix_times.append(end_time - start_time)
+
+        start_time = time.time()
+        matrix_vector_product(A,x)
+        end_time = time.time()
+        matrix_vector_times.append(end_time - start_time)
+
+        A = np.array(A)
+        B = np.array(B)
+        x = np.array(x)
+
+        start_time = time.time()
+        A @ B
+        end_time = time.time()
+        np_dot_matrix_times.append(end_time - start_time)
+
+        start_time = time.time()
+        A @ x
+        end_time = time.time()
+        np_dot_vector_times.append(end_time - start_time)
+    plt.subplot(121)
+    plt.plot(domain, matrix_matrix_times, label = "Matrix-Matrix")
+    plt.plot(domain, matrix_vector_times, label = "Matrix-Vector")
+    plt.plot(domain, np_dot_matrix_times, label = "NP Matrix-Matrix")
+    plt.plot(domain, np_dot_vector_times, label = "NP Matrix-Vector")
+    plt.title("Linear Plot")
+    plt.xlabel('n')
+    plt.ylabel("Seconds")
+
+    plt.subplot(122)
+    plt.loglog(domain, matrix_matrix_times)
+    plt.loglog(domain, matrix_vector_times)
+    plt.loglog(domain, np_dot_matrix_times)
+    plt.loglog(domain, np_dot_vector_times)
+    plt.title("Log-Log Plot")
+    plt.xlabel('n')
+    plt.ylabel("Seconds")
+    
+    plt.show()
+    
+
     raise NotImplementedError("Problem 4 Incomplete")
+
+
+if __name__ == "__main__":
+    # data = np.load("horse.npy")
+    # A = np.array([[1,1,1,1,1,1,1],[0,0,1,0,1,2,0]])
+    # plt.plot(data[0], data[1], "b,")
+    # plt.axis([-1,1,-1,1])
+    # plt.gca().set_aspect("equal")
+    # plt.show()
+    # stretch_horse = rotate(data, np.pi)
+    # plt.plot(stretch_horse[0], stretch_horse[1], "b,")
+    # plt.axis([-1,1,-1,1])
+    # plt.gca().set_aspect("equal")
+    # plt.show()
+    # solar_system(3*np.pi / 2, 10, 11, 1, 13)
+    # prob3()
+    prob4()
+    pass
