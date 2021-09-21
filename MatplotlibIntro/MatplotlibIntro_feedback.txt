@@ -1,0 +1,32 @@
+09/18/21 12:02
+
+Problem 1 (5 points):
+Score += 5
+
+Problem 2 (5 points):
+fix your domain please!
+Score += 3
+
+Problem 3 (5 points):
+Score += 5
+
+Problem 4 (5 points):
+add in titles for the plot and each subplot!
+Score += 3
+
+Problem 5 (15 points):
+label for x axis on histogram?
+Score += 14
+
+Problem 6 (10 points):
+Score += 10
+
+Code Quality (5 points):
+Score += 5
+
+Total score: 45/50 = 90.0%
+
+Great job!
+
+-------------------------------------------------------------------------------
+
