@@ -32,5 +32,40 @@ Total score: 40/50 = 80.0%
 Comments:
 	well done!
 
+09/24/21 11:52
+
+Problem 1 (5 points):
+Score += 5
+
+Problem 2 (5 points):
+Score += 5
+
+Problem 3 (10 points):
+Score += 10
+
+Problem 4 (10 points):
+	power_set(A) does not contain set() (the empty set)
+	power_set(A) does not contain set(A)
+	power_set(A) does not contain set() (the empty set)
+	power_set(A) does not contain set(A)
+	power_set(A) does not contain set() (the empty set)
+	power_set(A) does not contain set(A)
+	power_set(A) does not contain set() (the empty set)
+	power_set(A) does not contain set(A)
+Score += 0
+
+Problem 5 (15 points):
+with an invalid 2-digit input, it moves onto a new roll
+Score += 14
+
+Code Quality (5 points):
+Score += 5
+
+Total score: 39/50 = 78.0%
+
+
+Comments:
+	good job!
+
 -------------------------------------------------------------------------------
 

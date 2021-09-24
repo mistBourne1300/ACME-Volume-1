@@ -30,3 +30,39 @@ Great job!
 
 -------------------------------------------------------------------------------
 
+09/23/21 13:19
+
+Problem 1 (5 points):
+Score += 5
+
+Problem 2 (5 points):
+domain should be [-2pi, 2pi]
+Score += 3
+
+Problem 3 (5 points):
+Score += 5
+
+Problem 4 (5 points):
+labels and titles?
+Score += 3
+
+Problem 5 (15 points):
+x axis isn't labelled on histogram
+Score += 14
+
+Problem 6 (10 points):
+Score += 10
+
+Code Quality (5 points):
+Score += 5
+
+Total score: 45/50 = 90.0%
+
+Great job!
+
+
+Comments:
+	make sure you don't leave in warnings or errors (divide by zero on 3)
+
+-------------------------------------------------------------------------------
+
