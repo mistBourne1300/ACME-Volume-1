@@ -1,0 +1,26 @@
+09/24/21 20:02
+
+Problem 1 (10 points):
+reflect() failed
+Score += 7
+
+Problem 2 (15 points):
+Score += 15
+
+Problem 3 (10 points):
+Score += 10
+
+Problem 4 (10 points):
+NotImplementedError: Problem 4 Incomplete
+
+Code Quality (5 points):
+Score += 5
+
+Total score: 37/50 = 74.0%
+
+
+Comments:
+	lmk if you need any help!
+
+-------------------------------------------------------------------------------
+
