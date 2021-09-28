@@ -5,6 +5,12 @@
 <Date>
 """
 
+import numpy as np
+from scipy import linalg as la
+from scipy import sparse
+from scipy.sparse import linalg as spla
+from time import time
+import matplotlib.pyplot as plt
 
 # Problem 1
 def ref(A):
@@ -18,7 +24,11 @@ def ref(A):
     Returns:
         ((n,n) ndarray): The REF of A.
     """
-    raise NotImplementedError("Problem 1 Incomplete")
+    for i in range(len(A) - 1):
+        for j in range(i+1, len(A)):
+            A[j, :] = A[j, :] - (A[j, i] / A[i, i]) * A[i, :]
+
+    return A
 
 
 # Problem 2
@@ -33,8 +43,32 @@ def lu(A):
         L ((n,n) ndarray): The lower-triangular part of the decomposition.
         U ((n,n) ndarray): The upper-triangular part of the decomposition.
     """
+    m, n = np.shape(A)
+    U=np.copy(A)
+    L=np.identity(len(A))
+    for j in range(n):
+        for i in range(j+1, m):
+            L[i,j] = U[i,j]/U[j,j]
+            U[i,:] = U[i,:] - L[i,j] * U[j,:]
+    return L,U # We've included the return values for you, though your function needs to define them correctly.
     raise NotImplementedError("Problem 2 Incomplete")
 
+def forward_substitution(L,b):
+  # Accepts a lower triangular square matrix L and a vector b, solves Ly=b for y.
+  n = len(b)
+  y = np.zeros(n)
+  for i in range(n):
+    y[i] = (b[i] - np.dot(y,L[i,:]))/L[i,i]
+  return y
+
+
+def back_substitution(U,y):
+  # Accepts an upper triangular square matrix U and a vector b, solves Ux=b for x.
+  n = len(y)
+  x = np.zeros(n)
+  for i in range(1, n+1):
+    x[n-i] = (y[n-i] - np.dot(x, U[n-i,:]))/U[n-i, n-i]
+  return x
 
 # Problem 3
 def solve(A, b):
@@ -48,7 +82,11 @@ def solve(A, b):
     Returns:
         x ((m,) ndarray): The solution to the linear system.
     """
-    raise NotImplementedError("Problem 3 Incomplete")
+    L, U = lu(A)
+    y = forward_substitution(L, b)
+    x = back_substitution(U, y)
+    return x
+
 
 
 # Problem 4
@@ -69,7 +107,58 @@ def prob4():
     Plot the system size n versus the execution times. Use log scales if
     needed.
     """
-    raise NotImplementedError("Problem 4 Incomplete")
+    sizes = 2**np.arange(1,13)
+    inverse_solving = []
+    la_solve = []
+    lu_decomp_solve = []
+    lu_decomp_solve_time_solving = []
+    start_time, end_time = 0,0
+    for n in sizes:
+        A = np.random.random((n,n))
+        b = np.random.random(n)
+
+        # testing matrix inverse
+        start_time = time()
+        la.inv(A) @ b
+        end_time = time()
+        inverse_solving.append(end_time - start_time)
+
+        # testing la.solve
+        start_time = time()
+        la.solve(A,b)
+        end_time = time()
+        la_solve.append(end_time - start_time)
+
+        # testing la.lu_factor and la.lu_solve
+        start_time = time()
+        L,P = la.lu_factor(A)
+        la.lu_solve((L,P),b)
+        end_time = time()
+        lu_decomp_solve.append(end_time - start_time)
+
+        # testing only the la.lu_solve function
+        
+        start_time = time()
+        la.lu_solve((L,P), b)
+        end_time = time()
+        lu_decomp_solve_time_solving.append(end_time - start_time)
+    
+    
+    # print(inverse_solving, la_solve, lu_decomp_solve, lu_decomp_solve_time_solving,sep = "\n")
+
+    plt.loglog(sizes, inverse_solving, 'k', base = 2)
+    plt.loglog(sizes, la_solve, 'b', base = 2)
+    plt.loglog(sizes, lu_decomp_solve, 'g', base = 2)
+    plt.loglog(sizes, lu_decomp_solve_time_solving, 'r', base = 2)
+    plt.xlabel("Matrix size")
+    plt.ylabel("Time to Solve")
+    plt.legend(["Inverse", "la_solve", "lu_factor + lu_solve", "lu_solve (alone)"])
+    plt.show()
+
+
+
+
+    
 
 
 # Problem 5
@@ -89,7 +178,18 @@ def prob5(n):
     Returns:
         A ((n**2,n**2) SciPy sparse matrix)
     """
-    raise NotImplementedError("Problem 5 Incomplete")
+    diagonals = [1,-4,1]
+    offsets = [-1,0,1]
+
+    B = sparse.diags(diagonals, offsets, shape = (n,n))
+    Iden = sparse.diags([1],[0],shape=(n,n))
+    A = sparse.block_diag([B]*n)
+    A.setdiag(1,-n)
+    A.setdiag(1,n)
+    # plt.spy(A, markersize = 1)
+    # plt.show()
+    return A
+
 
 
 # Problem 6
@@ -108,4 +208,55 @@ def prob6():
     size n**2 versus the execution times. As always, use log scales where
     appropriate and use a legend to label each line.
     """
+    sizes = np.arange(2,75)
+    CSR_timings = []
+    NP_timings = []
+    for n in sizes:
+        # print(n)
+        A = prob5(n)
+        b = np.random.random(n**2) 
+
+        # timing the optimized sparse matrix solver
+        A_CSR = A.tocsr()
+        start_time = time()
+        spla.spsolve(A_CSR, b)
+        end_time = time()
+        CSR_timings.append(end_time - start_time)
+
+        A_numpy = np.array(A.toarray())
+        start_time = time()
+        la.solve(A_numpy, b)
+        end_time = time()
+        NP_timings.append(end_time - start_time)
+
+    plt.loglog(sizes, CSR_timings, 'k', base = 2)
+    plt.loglog(sizes, NP_timings, 'r', base = 2)
+    plt.xlabel("Matrix Size")
+    plt.ylabel("Time to Solve")
+    plt.legend(["CSR", "Regular"])
+    plt.show()
+    # plt.plot(sizes, CSR_timings)
+    # plt.plot(sizes, NP_timings)
+    # plt.legend(["CSR", "NP"])
+    # plt.show()
+
+
+
+
+
+
     raise NotImplementedError("Problem 6 Incomplete")
+
+if __name__ == "__main__":
+    # A = np.array([  [1,5,8],
+    #                 [2,3,7],
+    #                 [4,10,3]])
+    # # print(ref(A))
+    # l,u = lu(A)
+    # print(l,u,sep="\n\n")
+    # b = np.array([100,45,37])
+    # print(solve(A,b))
+    # prob4()
+    # print(prob5(10).toarray())
+    prob4()
+    prob6()
