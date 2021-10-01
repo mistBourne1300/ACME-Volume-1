@@ -24,3 +24,30 @@ Comments:
 
 -------------------------------------------------------------------------------
 
+10/01/21 16:13
+
+Problem 1 (10 points):
+reflect() failed
+Score += 7
+
+Problem 2 (15 points):
+Score += 15
+
+Problem 3 (10 points):
+Score += 10
+
+Problem 4 (10 points):
+NotImplementedError: Problem 4 Incomplete
+
+Code Quality (5 points):
+please comment your code and remove unecessary comments!
+Score += 3
+
+Total score: 35/50 = 70.0%
+
+
+Comments:
+	let me know if you need help next time!
+
+-------------------------------------------------------------------------------
+
