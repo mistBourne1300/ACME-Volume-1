@@ -30,3 +30,31 @@ Comments:
 
 -------------------------------------------------------------------------------
 
+10/10/21 15:07
+
+Problem 1 (10 points):
+Score += 10
+
+Problem 2 (10 points):
+Score += 10
+
+Problem 3 (10 points):
+Score += 10
+
+Problem 4 (5 points):
+Score += 5
+
+Problem 5 (5 points):
+Score += 5
+
+Problem 6 (5 points):
+NotImplementedError: Problem 6 Incomplete
+
+Code Quality (5 points):
+make sure you remove unnecessary comments!
+Score += 3
+
+Total score: 43/50 = 86.0%
+
+-------------------------------------------------------------------------------
+
