@@ -240,13 +240,6 @@ def prob6():
     # plt.legend(["CSR", "NP"])
     # plt.show()
 
-
-
-
-
-
-    raise NotImplementedError("Problem 6 Incomplete")
-
 if __name__ == "__main__":
     # A = np.array([  [1,5,8],
     #                 [2,3,7],
