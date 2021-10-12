@@ -29,3 +29,35 @@ Comments:
 	great job!
 
 
+10/03/21 10:52
+
+Problem 1 (5 points):
+Score += 5
+
+Problem 2 (5 points):
+Score += 5
+
+Problem 3 (5 points):
+Score += 5
+
+Problem 4 (10 points):
+Score += 10
+
+Problem 5 (10 points):
+Score += 10
+
+Problem 6 (10 points):
+File 'img_649.jpg' not found
+Score += 0
+
+Problem 7 (5 points):
+Score += 5
+
+Total score: 40/50 = 80.0%
+
+
+Comments:
+	the image needed to be in the photos folder
+
+-------------------------------------------------------------------------------
+
