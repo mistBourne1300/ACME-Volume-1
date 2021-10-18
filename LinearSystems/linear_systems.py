@@ -51,6 +51,7 @@ def lu(A):
             L[i,j] = U[i,j]/U[j,j]
             U[i,:] = U[i,:] - L[i,j] * U[j,:]
     return L,U # We've included the return values for you, though your function needs to define them correctly.
+    raise NotImplementedError("Problem 2 Incomplete")
 
 def forward_substitution(L,b):
   # Accepts a lower triangular square matrix L and a vector b, solves Ly=b for y.
@@ -181,6 +182,7 @@ def prob5(n):
     offsets = [-1,0,1]
 
     B = sparse.diags(diagonals, offsets, shape = (n,n))
+    Iden = sparse.diags([1],[0],shape=(n,n))
     A = sparse.block_diag([B]*n)
     A.setdiag(1,-n)
     A.setdiag(1,n)
@@ -237,6 +239,13 @@ def prob6():
     # plt.plot(sizes, NP_timings)
     # plt.legend(["CSR", "NP"])
     # plt.show()
+
+
+
+
+
+
+    raise NotImplementedError("Problem 6 Incomplete")
 
 if __name__ == "__main__":
     # A = np.array([  [1,5,8],
