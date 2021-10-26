@@ -23,3 +23,30 @@ Comments:
 
 -------------------------------------------------------------------------------
 
+10/26/21 11:40
+
+Problem 1 (25 points):
+Score += 25
+
+Problem 2 (10 points):
+explanation with different norms?
+Score += 7
+
+Problem 3 (10 points):
+Score += 10
+
+Problem 4 (extra credit) (0 points):
+Score += 0
+
+Code Quality (5 points):
+don't leave in test code and title your plots
+Score += 0
+
+Total score: 42/50 = 84.0%
+
+
+Comments:
+	by don't leave in test code, I mean don't leave in printed out matrrices. I had to scroll for a long time to find your plots
+
+-------------------------------------------------------------------------------
+
