@@ -11,7 +11,6 @@
 # from qr_decomposition import qr_gram_schmidt, qr_householder, hessenberg
 
 import numpy as np
-from numpy.ma.core import power
 from scipy import linalg as la
 from matplotlib import pyplot as plt
 import os
@@ -191,31 +190,31 @@ def qr_algorithm(A, N=50, tol=1e-12):
     raise NotImplementedError("Problem 6 Incomplete")
 
 if __name__ == "__main__":
-    os.chdir("/Users/chase/Desktop/Math345Volume1/byu_vol1/LeastSquares_Eigenvalues")
-    ##### prob 1 #####
+    # os.chdir("/Users/chase/Desktop/Math345Volume1/byu_vol1/LeastSquares_Eigenvalues")
+    # ##### prob 1 #####
 
-    A = np.random.random((100,9))
-    print("A: ", A.shape, "\n", A)
-    b = np.random.random(100)
-    print("b:\n", b)
+    # A = np.random.random((100,9))
+    # print("A: ", A.shape, "\n", A)
+    # b = np.random.random(100)
+    # print("b:\n", b)
 
-    xhat = least_squares(A,b)
-    print("xhat:\n", xhat)
-    print(A@xhat, "\nnorm:", np.linalg.norm(A@xhat-b))
-    line_fit()
-    print("done with line fit")
-    polynomial_fit()
-    ellipse_fit()
+    # xhat = least_squares(A,b)
+    # print("xhat:\n", xhat)
+    # print(A@xhat, "\nnorm:", np.linalg.norm(A@xhat-b))
+    # line_fit()
+    # print("done with line fit")
+    # polynomial_fit()
+    # ellipse_fit()
     
     
-    A = np.random.random((10,10))
+    # A = np.random.random((10,10))
     # print(A)
-    eigs, vecs = la.eig(A)
-    print(eigs)
+    # eigs, vecs = la.eig(A)
+    # print(eigs)
     # index = np.argmax(eigs)
     # e,v = power_method(A)
     # print(np.allclose(eigs[index], e))
     # print(f'{e}, {v}')
 
-    print(qr_algorithm(A))
+    # print(qr_algorithm(A))
     pass
