@@ -31,8 +31,6 @@ def least_squares(A, b):
         x ((n, ) ndarray): The solution to the normal equations.
     """
     Q,R = la.qr(A, mode='economic')
-    print("Q: ", Q.shape, "\n", Q)
-    print("R: ", R.shape, "\n", R)
     xhat = la.solve_triangular(R, Q.T @ b)
     return xhat
 
@@ -50,9 +48,7 @@ def line_fit():
     xhat = least_squares(A,b)
     plt.scatter(housing[:,0], housing[:,1], s=1)
     domain = np.linspace(0,16)
-    print(xhat)
     plt.plot(domain, xhat[0]*domain + xhat[1], 'k')
-    print("housing A:\n", A)
     plt.show()
 
 
@@ -65,25 +61,38 @@ def polynomial_fit():
     """
     housing = np.load("housing.npy")
     domain = np.linspace(0,16)
+    plt.subplot(221)
+    plt.title("Raw Housing Data")
+    plt.xlabel("Year")
+    plt.ylabel("Housing Index")
     plt.scatter(housing[:,0], housing[:,1], s=1)
     b = housing[:,1]
     # degree three
     A = np.vander(housing[:,0], 4)
     xhat = la.lstsq(A,b)[0]
-    print(xhat)
+    plt.subplot(222)
+    plt.title("3rd Degree Best Fit")
+    plt.xlabel("Year")
+    plt.ylabel("Housing Index")
     plt.plot(domain, xhat[0]*(domain**3) + xhat[1]*(domain**2) + xhat[2]*domain + xhat[3], 'k')
 
     # degree 6
     A = np.vander(housing[:,0], 7)
     xhat = la.lstsq(A,b)[0]
+    plt.subplot(223)
+    plt.title("6th Degree Best Fit")
+    plt.xlabel("Year")
+    plt.ylabel("Housing Index")
     plt.plot(domain, xhat[0]*(domain**6) + xhat[1]*(domain**5) + xhat[2]*(domain**4) + xhat[3]*(domain**3) + xhat[4]*(domain**2) + xhat[5]*(domain) + xhat[6], 'b')
 
     # degree 12
     A = np.vander(housing[:,0], 13)
     xhat = la.lstsq(A,b)[0]
+    plt.subplot(224)
+    plt.title("12th Degree Best Fit")
+    plt.xlabel("Year")
+    plt.ylabel("Housing Index")
     plt.plot(domain, xhat[0]*(domain**12) + xhat[1]*(domain**11) + xhat[2]*(domain**10) + xhat[3]*(domain**9) + xhat[4]*(domain**8) + xhat[5]*(domain**7) + xhat[6]*(domain**6) + xhat[7]*(domain**5) + xhat[8]*(domain**4) + xhat[9]*(domain**3) + xhat[10]*(domain**2) + xhat[11]*domain + xhat[12], 'r')
-
-    plt.legend(["Degree 3", "Degree 6", 'Degree 12'])
     plt.show()
 
 
@@ -106,11 +115,8 @@ def ellipse_fit():
     plot_ellipse() to plot the ellipse.
     """
     ellipse_points = np.load("ellipse.npy")
-    print(ellipse_points)
     A = np.array([[p[0]**2, p[0], p[0]*p[1], p[1], p[1]**2] for p in ellipse_points])
-    print(A)
     xhat = la.lstsq(A, [1 for i in A])[0]
-    print("xhat:", xhat)
     plot_ellipse(xhat[0], xhat[1], xhat[2], xhat[3], xhat[4])
     
     plt.scatter(ellipse_points[:,0], ellipse_points[:,1], s=1)
@@ -140,7 +146,6 @@ def power_method(A, N=20, tol=1e-12):
         x0 = A@x0
         x0 = x0/np.linalg.norm(x0)
         if(np.linalg.norm(x0-x_prev) < tol):
-            print("returning early at k =", k)
             return x0.T@A@x0, x0
     return x0.T@A@x0, x0
     raise NotImplementedError("Problem 5 Incomplete")
@@ -189,18 +194,18 @@ if __name__ == "__main__":
     os.chdir("/Users/chase/Desktop/Math345Volume1/byu_vol1/LeastSquares_Eigenvalues")
     ##### prob 1 #####
 
-    # A = np.random.random((100,9))
-    # print("A: ", A.shape, "\n", A)
-    # b = np.random.random(100)
-    # print("b:\n", b)
+    A = np.random.random((100,9))
+    print("A: ", A.shape, "\n", A)
+    b = np.random.random(100)
+    print("b:\n", b)
 
-    # xhat = least_squares(A,b)
-    # print("xhat:\n", xhat)
-    # print(A@xhat, "\nnorm:", np.linalg.norm(A@xhat-b))
-    # line_fit()
-    # print("done with line fit")
-    # polynomial_fit()
-    # ellipse_fit()
+    xhat = least_squares(A,b)
+    print("xhat:\n", xhat)
+    print(A@xhat, "\nnorm:", np.linalg.norm(A@xhat-b))
+    line_fit()
+    print("done with line fit")
+    polynomial_fit()
+    ellipse_fit()
     
     
     A = np.random.random((10,10))
