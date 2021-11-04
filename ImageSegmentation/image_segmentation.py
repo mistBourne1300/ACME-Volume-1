@@ -9,6 +9,7 @@ import numpy as np
 from numpy.linalg import eig
 from scipy import linalg as la
 from scipy import sparse
+import scipy.sparse.linalg as spla
 import imageio
 from matplotlib import pyplot as plt
 import os
@@ -96,7 +97,6 @@ class ImageSegmenter:
             self.greyscale = self.image.mean(axis=2)
         else:
             self.greyscale = self.image
-            print(f'greyscale shape: {self.greyscale.shape}')
         self.unravelled = np.ravel(self.greyscale)
         
 
@@ -118,10 +118,8 @@ class ImageSegmenter:
         D=[]
         for i in range(A.shape[0]):
             neighbors, distances = get_neighbors(i, r, h, w)
-            # print(f'neighbors: {neighbors}\ndistances: {distances}')
             weights = []
             for j in range(len(neighbors)):
-                # print(f'i:{i}, j:{j}, neighbors[j]:{neighbors[j]}')
                 exleft = np.abs(self.unravelled[i] - self.unravelled[neighbors[j]])/sigma_B2
                 exright = distances[j]/sigma_X2
                 wij = np.exp(- exleft - exright)
@@ -129,7 +127,6 @@ class ImageSegmenter:
             A[i, np.array(neighbors)] = weights
             D.append(sum(weights))
         A = A.tocsc()
-        print(f'A: {A}')
         D = np.array(D)
         return A, D
         raise NotImplementedError("Problem 4 Incomplete")
@@ -141,25 +138,56 @@ class ImageSegmenter:
         L = sparse.csgraph.laplacian(A)
         over_sqrtD  = sparse.diags([1/np.sqrt(d) for d in D])
         # returns the two smallest eigenvalues and eigenvectors
-        eigvects, eigvals = sparse.linalg.eigsh(over_sqrtD @ L @ over_sqrtD, which = "SM", k=2)
+        eigvals, eigvects = spla.eigsh(over_sqrtD @ L @ over_sqrtD, which = "SM", k=2)
         max_index = np.argmax(eigvals)
-        second_smallest_eigvect = np.array(eigvects[max_index]).reshape((h,w))
-        return second_smallest_eigvect > 0
+        second_smallest_eigvect = np.array(eigvects[:,max_index]).reshape((h,w))
+        return second_smallest_eigvect > 0 
 
         raise NotImplementedError("Problem 5 Incomplete")
 
     # Problem 6
     def segment(self, r=5., sigma_B=.02, sigma_X=3.):
         """Display the original image and its segments."""
+        A, D = self.adjacency(r,sigma_B, sigma_X)
+        cut = self.cut(A,D)
+        if len(self.image.shape) == 3:
+            # we have a color image
+            cutlist = [cut for c in range(self.image.shape[-1])]
+            cut3 = np.stack(cutlist, axis = 2)
+            
+            plt.subplot(131)
+            plt.imshow(self.image)
+            plt.axis('off')
 
-        raise NotImplementedError("Problem 6 Incomplete")
+            plt.subplot(132)
+            plt.imshow(self.image * cut3)
+            plt.axis('off')
+
+            plt.subplot(133)
+            plt.imshow(self.image * ~cut3)
+            plt.axis('off')
+        else:
+            plt.subplot(131)
+            plt.imshow(self.image, cmap = 'gray')
+            plt.axis('off')
+
+            plt.subplot(132)
+            plt.imshow(self.image * cut, cmap = 'gray')
+            plt.axis('off')
+
+            plt.subplot(133)
+            plt.imshow(self.image * ~cut, cmap = 'gray')
+            plt.axis('off')
+
+        plt.show()
 
 
-# if __name__ == '__main__':
-#     ImageSegmenter("dream_gray.png").segment()
-#     ImageSegmenter("dream.png").segment()
-#     ImageSegmenter("monument_gray.png").segment()
-#     ImageSegmenter("monument.png").segment()
+if __name__ == '__main__':
+    os.chdir("/Users/chase/Desktop/Math345Volume1/byu_vol1/ImageSegmentation")
+    ImageSegmenter("dream_gray.png").segment()
+    ImageSegmenter("dream.png").segment()
+    ImageSegmenter("blue_heart.png").segment()
+
 if __name__ == "__main__":
     # A = np.array([  [0,1,0,0,1,1],
     #                 [1,0,1,0,1,0],
@@ -186,15 +214,17 @@ if __name__ == "__main__":
     im2 = "dream_gray.png"
     im3 = "blue_heart.png"
     im4 = "/Users/chase/Downloads/istockphoto-1226241649-170667a.jpg"
-    chimera = ImageSegmenter(im3)
-    #chimera.show_original()
+    im5 = "dream.png"
+    chimera = ImageSegmenter(im2)
+    # chimera.show_original()
     A, D = chimera.adjacency()
-    A = sparse.csr_matrix.toarray(A)
-    print(f'A shape: {A.shape}, data type: {A.dtype}')
-    print(f'D: {D}, data type: {D.dtype}')
-    blueH_A = np.load("HeartMatrixA.npz").files
-    bluH_D = np.load("HeartMatrixD.npy")
-    print(f'A should be: {blueH_A}')
-    print(f'D should be: {bluH_D}')
-    print(f'mask: {chimera.cut(A,D)}')
+    # A = sparse.csr_matrix.toarray(A)
+    # print(f'A shape: {A.shape}, data type: {A.dtype}')
+    # print(f'D: {D}, data type: {D.dtype}')
+    # blueH_A = np.load("HeartMatrixA.npz").files
+    # bluH_D = np.load("HeartMatrixD.npy")
+    # print(f'A should be: {blueH_A}')
+    # print(f'D should be: {bluH_D}')
+    # print(f'mask: {chimera.cut(A,D)}')
+    chimera.segment()
     pass
