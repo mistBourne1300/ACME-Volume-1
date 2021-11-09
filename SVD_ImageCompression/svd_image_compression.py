@@ -2,6 +2,13 @@
 """Volume 1: The SVD and Image Compression. Solutions File."""
 
 
+from numpy.linalg import svd
+from scipy import linalg as la
+import numpy as np
+import matplotlib.pyplot as plt
+import imageio
+import os
+
 # Problem 1
 def compact_svd(A, tol=1e-6):
     """Compute the truncated SVD of A.
@@ -15,15 +22,55 @@ def compact_svd(A, tol=1e-6):
         ((r,) ndarray): The singular values of A as a 1-D array.
         ((r,n) ndarray): The orthonormal matrix V^H in the SVD.
     """
-    raise NotImplementedError("Problem 1 Incomplete")
-
+    eigvals, eigvects = la.eig(A.T@A)
+    sortindex = np.argsort(eigvals)
+    sing = np.array([np.sqrt(np.real(eigvals[index])) for index in sortindex[::-1]])
+    eigvects = np.array([eigvects[index] for index in sortindex[::-1]])
+    r = np.sum(sing > tol)
+    sigma1 = sing[:r]
+    V1 = eigvects[:,:r]
+    U1 = A@V1 / sigma1
+    return U1, sigma1, V1.T
 
 # Problem 2
 def visualize_svd(A):
     """Plot the effect of the SVD of A as a sequence of linear transformations
     on the unit circle and the two standard basis vectors.
     """
-    raise NotImplementedError("Problem 2 Incomplete")
+    U, Sig, Vh = la.svd(A)
+    E = np.array([  [1,0,0],
+                    [0,0,1]])
+    Sig = la.diagsvd(Sig, A.shape[0], A.shape[1])
+
+    theta = np.linspace(0,2*np.pi, 200)
+    unit_circle = np.array([np.cos(theta), np.sin(theta)])
+    plt.subplot(221)
+    plt.plot(unit_circle[0,:], unit_circle[1,:])
+    plt.plot([1,0,0], [0,0,1])
+    plt.axis("equal")
+
+    plt.subplot(222)
+    VHS = Vh@unit_circle
+    VHE = Vh@E
+    plt.plot(VHS[0,:], VHS[1,:])
+    plt.plot(VHE[0,:], VHE[1,:])
+    plt.axis("equal")
+
+    plt.subplot(223)
+    SVHS = Sig@VHS
+    SVHE = Sig@VHE
+    plt.plot(SVHS[0,:], SVHS[1,:])
+    plt.plot(SVHE[0,:], SVHE[1,:])
+    plt.axis("equal")
+
+    plt.subplot(224)
+    USVHS = U@SVHS
+    USVHE = U@SVHE
+    plt.plot(USVHS[0,:], USVHS[1,:])
+    plt.plot(USVHE[0,:], USVHE[1,:])
+    plt.axis("equal")
+
+    plt.show()
 
 
 # Problem 3
@@ -40,7 +87,16 @@ def svd_approx(A, s):
         ((m,n), ndarray) The best rank s approximation of A.
         (int) The number of entries needed to store the truncated SVD.
     """
-    raise NotImplementedError("Problem 3 Incomplete")
+    if np.linalg.matrix_rank(A) < s:
+        raise ValueError("s is more than the matrix rank")
+    U, S, Vh = la.svd(A, full_matrices = False)
+    Sig = la.diagsvd(S, A.shape[0], A.shape[1])
+    Uhat = U[:,:s]
+    Shat = Sig[:s,:s]
+    Vhat = Vh[:s,:]
+
+    return Uhat@Shat@Vhat, Uhat.size + s + Vhat.size
+
 
 
 # Problem 4
@@ -58,7 +114,21 @@ def lowest_rank_approx(A, err):
             ||A - A_s||_2 < err.
         (int) The number of entries needed to store the truncated SVD.
     """
-    raise NotImplementedError("Problem 4 Incomplete")
+    rankA = np.linalg.matrix_rank(A)
+    U,S,Vh = la.svd(A, full_matrices = False)
+    Sig = la.diagsvd(S, A.shape[0], A.shape[1])
+
+    s=0
+    while S[s] > err:
+        s+=1
+        if(s>=rankA):
+            raise ValueError("No approximation exists within error tolerance")
+    
+    Uhat = U[:,:s]
+    Shat = Sig[:s,:s]
+    Vhat = Vh[:s,:]
+
+    return Uhat@Shat@Vhat, Uhat.size + s + Vhat.size
 
 
 # Problem 5
@@ -72,4 +142,68 @@ def compress_image(filename, s):
         filename (str): Image file path.
         s (int): Rank of new image.
     """
-    raise NotImplementedError("Problem 5 Incomplete")
+    image = imageio.imread(filename)/255
+    
+    
+    # color image
+    if len(image.shape) == 3:
+        plt.subplot(121)
+        plt.imshow(image)
+        plt.axis("off")
+        plt.subplot(122)
+
+        R = image[:,:,0]
+        G = image[:,:,1]
+        B = image[:,:,2]
+        Rcomp, rsize = svd_approx(R, s)
+        Gcomp, gsize = svd_approx(G, s)
+        Bcomp, bsize = svd_approx(B, s)
+
+        RGB = np.clip(np.dstack((Rcomp,Gcomp,Bcomp)), 0, 1)
+        plt.imshow(RGB)
+        plt.axis("off")
+        plt.suptitle(f'Compressed image with s={s}. Entry diff: {image.size - rsize - gsize - bsize} indices saved')
+
+    
+    # greyscale image
+    else: 
+        plt.subplot(121)
+        plt.imshow(image, cmap = 'gray')
+        plt.axis("off")
+        plt.subplot(122)
+        compressed, size = svd_approx(image, s)
+        compressed = np.clip(compressed, 0, 1)
+        plt.imshow(compressed, cmap = 'gray')
+        plt.axis("off")
+        plt.suptitle(f'Compressed image with s={s}. Entry diff: {image.size - size} indices saved')
+
+
+
+    plt.show()
+
+
+
+if __name__ == "__main__":
+    # A = np.random.random((3,3))
+    # print(A)
+
+    # u1, sigma1, v1h = compact_svd(A)
+    # Sigma = np.diag(sigma1)
+    # print(u1@Sigma@v1h)
+
+    # A = np.array([[3,1],[1,3]])
+    # visualize_svd(A)
+
+    # A = np.random.randint(0,10,size =(40,45))
+    # print(f'rank: {np.linalg.matrix_rank(A)}')
+    # print(f'A: {A}\n\n')
+    # SVD_approx, size = svd_approx(A,10)
+    # print(np.linalg.matrix_rank(SVD_approx))
+    # print(f'SVD_approx: {SVD_approx}')
+    # print(f'size: {size}')
+
+    os.chdir("/Users/chase/Desktop/Math345Volume1/byu_vol1/SVD_ImageCompression")
+    hubble = "hubble.jpg"
+    hub_grey = "hubble_gray.jpg"
+
+    compress_image(hubble, 50)

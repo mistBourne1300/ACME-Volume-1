@@ -129,7 +129,6 @@ class ImageSegmenter:
         A = A.tocsc()
         D = np.array(D)
         return A, D
-        raise NotImplementedError("Problem 4 Incomplete")
 
     # Problem 5
     def cut(self, A, D):
@@ -138,12 +137,10 @@ class ImageSegmenter:
         L = sparse.csgraph.laplacian(A)
         over_sqrtD  = sparse.diags([1/np.sqrt(d) for d in D])
         # returns the two smallest eigenvalues and eigenvectors
-        eigvals, eigvects = spla.eigsh(over_sqrtD @ L @ over_sqrtD, which = "SM", k=2)
+        eigvals, eigvects = spla.eigsh(over_sqrtD.dot(L.dot(over_sqrtD)) , which = "SM", k=2)
         max_index = np.argmax(eigvals)
         second_smallest_eigvect = np.array(eigvects[:,max_index]).reshape((h,w))
-        return second_smallest_eigvect > 0 
-
-        raise NotImplementedError("Problem 5 Incomplete")
+        return second_smallest_eigvect > 0
 
     # Problem 6
     def segment(self, r=5., sigma_B=.02, sigma_X=3.):
@@ -182,11 +179,11 @@ class ImageSegmenter:
         plt.show()
 
 
-if __name__ == '__main__':
-    os.chdir("/Users/chase/Desktop/Math345Volume1/byu_vol1/ImageSegmentation")
-    ImageSegmenter("dream_gray.png").segment()
-    ImageSegmenter("dream.png").segment()
-    ImageSegmenter("blue_heart.png").segment()
+# if __name__ == '__main__':
+#     os.chdir("/Users/chase/Desktop/Math345Volume1/byu_vol1/ImageSegmentation")
+#     ImageSegmenter("dream_gray.png").segment()
+#     ImageSegmenter("dream.png").segment()
+#     ImageSegmenter("blue_heart.png").segment()
 
 if __name__ == "__main__":
     # A = np.array([  [0,1,0,0,1,1],
@@ -210,12 +207,13 @@ if __name__ == "__main__":
     # print(connectivity(B))
     os.chdir("/Users/chase/Desktop/Math345Volume1/byu_vol1/ImageSegmentation")
 
-    im1 = "/Users/chase/Downloads/img_0124.jpg"
+    im1 = "/Users/chase/Downloads/img_2803.jpg"
     im2 = "dream_gray.png"
     im3 = "blue_heart.png"
     im4 = "/Users/chase/Downloads/istockphoto-1226241649-170667a.jpg"
     im5 = "dream.png"
-    chimera = ImageSegmenter(im2)
+
+    chimera = ImageSegmenter(im3)
     # chimera.show_original()
     A, D = chimera.adjacency()
     # A = sparse.csr_matrix.toarray(A)
