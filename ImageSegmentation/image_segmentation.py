@@ -207,10 +207,8 @@ if __name__ == "__main__":
     # print(connectivity(B))
     os.chdir("/Users/chase/Desktop/Math345Volume1/byu_vol1/ImageSegmentation")
 
-    im1 = "/Users/chase/Downloads/img_2803.jpg"
     im2 = "dream_gray.png"
     im3 = "blue_heart.png"
-    im4 = "/Users/chase/Downloads/istockphoto-1226241649-170667a.jpg"
     im5 = "dream.png"
 
     chimera = ImageSegmenter(im3)
