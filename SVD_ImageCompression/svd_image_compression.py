@@ -22,15 +22,21 @@ def compact_svd(A, tol=1e-6):
         ((r,) ndarray): The singular values of A as a 1-D array.
         ((r,n) ndarray): The orthonormal matrix V^H in the SVD.
     """
-    eigvals, eigvects = la.eig(A.T@A)
-    sortindex = np.argsort(eigvals)
-    sing = np.array([np.sqrt(np.real(eigvals[index])) for index in sortindex[::-1]])
-    eigvects = np.array([eigvects[index] for index in sortindex[::-1]])
+
+    eigvals, eigvects = la.eig(A.T@A) 
+    eigvals = np.real(eigvals) # get just the real parts of the eigenvalues
+    sortindex = np.argsort(eigvals) # get the array to sort the eigenvalues
+    eigvals = np.array([eigvals[index] for index in sortindex[::-1]]) # reassign eigvals to the argsorted version
+
+    r = np.sum(eigvals > tol)
+    sing = np.array([np.sqrt(lam) for lam in eigvals[:r]])
+
+    eigvects = np.array([eigvects[index] for index in sortindex[::-1]]) # sort the vectors the same way the values were sorted
     r = np.sum(sing > tol)
-    sigma1 = sing[:r]
+    sigma1 = sing
     V1 = eigvects[:,:r]
     U1 = A@V1 / sigma1
-    return U1, sigma1, V1.T
+    return np.real(U1), sigma1, np.real(V1.T)
 
 # Problem 2
 def visualize_svd(A):
@@ -70,6 +76,7 @@ def visualize_svd(A):
     plt.plot(USVHE[0,:], USVHE[1,:])
     plt.axis("equal")
 
+    plt.suptitle("SVD transformations on a unit circle")
     plt.show()
 
 
@@ -184,7 +191,12 @@ def compress_image(filename, s):
 
 
 if __name__ == "__main__":
-    # A = np.random.random((3,3))
+    A = np.random.random((5,10))
+    # A = np.array([  [3., 9., 1., 1., 3., 7., 3., 3., 2., 2.],
+    #                 [6., 9., 2., 8., 8., 5., 8., 3., 2., 7.],
+    #                 [2., 2., 1., 2., 7., 8., 9., 4., 2., 3.],
+    #                 [1., 8., 4., 2., 9., 3., 2., 4., 2., 5.],
+    #                 [8., 8., 4., 7., 8., 3., 9., 8., 4., 9.]])
     # print(A)
 
     # u1, sigma1, v1h = compact_svd(A)
@@ -204,6 +216,7 @@ if __name__ == "__main__":
 
     os.chdir("/Users/chase/Desktop/Math345Volume1/byu_vol1/SVD_ImageCompression")
     hubble = "hubble.jpg"
+    nate = "/Users/chase/Downloads/img_2819.jpg"
     hub_grey = "hubble_gray.jpg"
 
-    compress_image(hubble, 50)
+    compress_image(hubble, 10)
