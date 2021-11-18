@@ -1,0 +1,30 @@
+11/18/21 13:32
+
+Show a face from the dataset (5 points):
+Score += 5
+
+Show mean face. Show original face next to mean-shifted face (10 points):
+I think you showed problem 3 here instead of problem 2
+Score += 0
+
+Show some of eigenfaces (10 points):
+Score += 10
+
+Show projections for 4 different versions of s (10 points):
+Score += 0
+
+Show sample images and their matches (10 points):
+Score += 0
+
+Code Quality (5 points):
+comment and label your images! eigenvalues, s values, et cetera
+Score += 1
+
+Total score: 16/50 = 32.0%
+
+
+Comments:
+	nice start!
+
+-------------------------------------------------------------------------------
+
