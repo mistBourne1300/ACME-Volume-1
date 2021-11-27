@@ -82,3 +82,34 @@ Great job!
 
 -------------------------------------------------------------------------------
 
+11/27/21 14:48
+
+Show a face from the dataset (5 points):
+Score += 5
+
+Show mean face. Show original face next to mean-shifted face (10 points):
+Score += 10
+
+Show some of eigenfaces (10 points):
+Score += 10
+
+Show projections for 4 different versions of s (10 points):
+Score += 10
+
+Show sample images and their matches (10 points):
+Score += 10
+
+Code Quality (5 points):
+just be sure to comment and title problems 4 and 6!
+Score += 3
+
+Total score: 48/50 = 96.0%
+
+Great job!
+
+
+Comments:
+	nicely done
+
+-------------------------------------------------------------------------------
+
