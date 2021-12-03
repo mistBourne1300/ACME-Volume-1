@@ -1,0 +1,35 @@
+12/03/21 12:21
+
+Problem 1 (5 points):
+Score += 5
+
+Problem 2 (5 points):
+Score += 5
+
+Problem 3 (5 points):
+Score += 5
+
+Problem 4 (10 points):
+Score += 10
+
+Problem 5 (10 points):
+Score += 10
+
+Problem 6 (10 points):
+don't forget to write insights for why each plot is meaningful
+Score += 8
+
+Code Quality (5 points):
+missing code comments and a few titles, but looking good!
+Score += 3
+
+Total score: 46/50 = 92.0%
+
+Great job!
+
+
+Comments:
+	nice start
+
+-------------------------------------------------------------------------------
+
