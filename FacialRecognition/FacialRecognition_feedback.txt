@@ -113,3 +113,34 @@ Comments:
 
 -------------------------------------------------------------------------------
 
+12/07/21 10:23
+
+Show a face from the dataset (5 points):
+Score += 5
+
+Show mean face. Show original face next to mean-shifted face (10 points):
+Score += 10
+
+Show some of eigenfaces (10 points):
+Score += 10
+
+Show projections for 4 different versions of s (10 points):
+Score += 10
+
+Show sample images and their matches (10 points):
+Score += 10
+
+Code Quality (5 points):
+missing comments and titles on a lot plots
+Score += 2
+
+Total score: 47/50 = 94.0%
+
+Great job!
+
+
+Comments:
+	looking good!
+
+-------------------------------------------------------------------------------
+
