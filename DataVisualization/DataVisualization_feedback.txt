@@ -33,3 +33,38 @@ Comments:
 
 -------------------------------------------------------------------------------
 
+12/08/21 00:41
+
+Problem 1 (5 points):
+Score += 5
+
+Problem 2 (5 points):
+Score += 5
+
+Problem 3 (5 points):
+Score += 5
+
+Problem 4 (10 points):
+Score += 10
+
+Problem 5 (10 points):
+Score += 10
+
+Problem 6 (10 points):
+insights
+Score += 8
+
+Code Quality (5 points):
+comments and titles, but xkcd looks magic
+Score += 2
+
+Total score: 45/50 = 90.0%
+
+Great job!
+
+
+Comments:
+	well done dude
+
+-------------------------------------------------------------------------------
+
