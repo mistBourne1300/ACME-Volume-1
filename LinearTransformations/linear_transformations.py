@@ -133,6 +133,8 @@ def prob3():
         end_time = time.time()
         matrix_vector_times.append(end_time - start_time)
     
+
+    # plot the computed times
     plt.subplot(121)
     plt.plot(domain, matrix_vector_times)
     plt.title("Matrix-Vector Multiplication")
@@ -189,6 +191,8 @@ def prob4():
         A @ x
         end_time = time.time()
         np_dot_vector_times.append(end_time - start_time)
+    
+    # plot the computed times
     plt.subplot(121)
     plt.plot(domain, matrix_matrix_times, 'k')
     plt.plot(domain, matrix_vector_times, 'b')
