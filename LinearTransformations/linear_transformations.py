@@ -71,7 +71,6 @@ def solar_system(T, x_e, x_m, omega_e, omega_m):
         omega_m (float): The moon's angular velocity.
     """
     P_e0 = np.array([x_e, 0])
-    #print(P_e0)
     P_m0 = np.array([x_m, 0])
     times = np.linspace(0,T,500)
     positions_E = np.array([rotate(P_e0, time*omega_e) for time in times])
@@ -119,6 +118,7 @@ def prob3():
     domain = 2**np.arange(1,10)
     matrix_vector_times = []
     matrix_matrix_times = []
+    # time the matrix products for various values of n
     for n in domain:
         A = random_matrix(n)
         B = random_matrix(n)
@@ -161,6 +161,7 @@ def prob4():
     matrix_matrix_times = []
     np_dot_matrix_times = []
     np_dot_vector_times = []
+    # calcuate the times for each matrix multiplication for each n
     for n in domain:
         A = random_matrix(n)
         B = random_matrix(n)
