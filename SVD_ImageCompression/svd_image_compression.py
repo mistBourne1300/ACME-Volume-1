@@ -216,7 +216,7 @@ if __name__ == "__main__":
 
     os.chdir("/Users/chase/Desktop/Math345Volume1/byu_vol1/SVD_ImageCompression")
     hubble = "hubble.jpg"
-    nate = "/Users/chase/Downloads/img_2819.jpg"
+    nate = "/Users/chase/Downloads/img_2879.jpg"
     hub_grey = "hubble_gray.jpg"
 
-    compress_image(hubble, 10)
+    compress_image(nate, 100)

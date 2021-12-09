@@ -23,7 +23,7 @@ def stretch(A, a, b):
     """
     STRETCH = np.array([[a,0],[0,b]])
     return STRETCH @ A
-    raise NotImplementedError("Problem 1 Incomplete")
+
 
 def shear(A, a, b):
     """Slant the points in A by a in the x direction and b in the
@@ -189,10 +189,11 @@ def prob4():
         end_time = time.time()
         np_dot_vector_times.append(end_time - start_time)
     plt.subplot(121)
-    plt.plot(domain, matrix_matrix_times, label = "Matrix-Matrix")
-    plt.plot(domain, matrix_vector_times, label = "Matrix-Vector")
-    plt.plot(domain, np_dot_matrix_times, label = "NP Matrix-Matrix")
+    plt.plot(domain, matrix_matrix_times, 'k')
+    plt.plot(domain, matrix_vector_times, 'b')
+    plt.plot(domain, np_dot_matrix_times, 'r')
     plt.plot(domain, np_dot_vector_times, label = "NP Matrix-Vector")
+    plt.legend(["Matrix-Matrix","Matrix-Vector","NP Matrix-Matrix","NP Matrix-Vector"])
     plt.title("Linear Plot")
     plt.xlabel('n')
     plt.ylabel("Seconds")
@@ -202,6 +203,7 @@ def prob4():
     plt.loglog(domain, matrix_vector_times, 'b')
     plt.loglog(domain, np_dot_matrix_times, 'r')
     plt.loglog(domain, np_dot_vector_times, 'y')
+    plt.legend(["Matrix-Matrix","Matrix-Vector","NP Matrix-Matrix","NP Matrix-Vector"])
     plt.title("Log-Log Plot")
     plt.xlabel('n')
     plt.ylabel("Seconds")
@@ -209,7 +211,7 @@ def prob4():
     plt.show()
     
 
-    raise NotImplementedError("Problem 4 Incomplete")
+
 
 
 if __name__ == "__main__":
