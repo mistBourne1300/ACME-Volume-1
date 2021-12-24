@@ -51,3 +51,32 @@ Comments:
 
 -------------------------------------------------------------------------------
 
+
+12/18/21 20:17
+
+Problem 1 (10 points):
+reflect() failed
+Score += 7
+
+Problem 2 (15 points):
+Score += 15
+
+Problem 3 (10 points):
+Score += 10
+
+Problem 4 (10 points):
+Score += 10
+
+Code Quality (5 points):
+Score += 5
+
+Total score: 47/50 = 94.0%
+
+Great job!
+
+
+Comments:
+	noice
+
+-------------------------------------------------------------------------------
+
