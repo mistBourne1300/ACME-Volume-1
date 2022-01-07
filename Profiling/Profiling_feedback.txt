@@ -1,0 +1,61 @@
+01/06/22 20:35
+
+Problem 1 (5 points):
+max_path_fast('triangle.txt'):
+	Solution time: 0.002676725388 seconds
+	Student time:  0.001041173935 seconds (Excellent!)
+max_path_fast('triangle_large.txt'):
+	Solution time: 0.046336174011 seconds
+	Student time:  0.001034498215 seconds (Excellent!)
+Score += 5
+
+Problem 2 (10 points):
+primes_fast(100):
+	Solution time: 0.000000000000 seconds
+	Student time:  0.001035451889 seconds
+primes_fast(10001):
+	Solution time: 0.238845586777 seconds
+	Student time:  0.728115558624 seconds
+Try to get this one under .5 seconds, reach out to me if you get stuck!
+Score += 8
+
+Problem 3 (5 points):
+nearest_column_fast(), 10x15 A:
+	Solution time: 0.000000000000 seconds
+	Student time:  0.000000000000 seconds
+nearest_column_fast(), 1000x1005 A:
+	Solution time: 0.005401611328 seconds
+	Student time:  0.004431486130 seconds (Excellent!)
+Score += 5
+
+Problem 4 (5 points):
+name_scores_fast():
+	Solution time: 0.036674022675 seconds
+	Student time:  0.020384550095 seconds (Excellent!)
+Score += 5
+
+Problem 5 (5 points):
+Score += 5
+
+Problem 6 (10 points):
+list(prime_sieve(100000)):
+	Solution time: 7.730951309204 seconds
+	Student time:  0.339733362198 seconds (Excellent!)
+Score += 10
+
+Problem 7 (5 points):
+Use plt.loglog to create the graph
+Score += 2
+
+Code Quality (5 points):
+Didn't see any comments
+Score += 4
+
+Total score: 44/50 = 88.0%
+
+
+Comments:
+	Looking solid, good work!
+
+-------------------------------------------------------------------------------
+
