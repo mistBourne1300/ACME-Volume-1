@@ -66,13 +66,15 @@ def primes(N):
         current += 1
     return primes_list
 
+
+# I'm not sure what happened, but this definitely runs in less than .5 seconds on my computer. see the screenshot in this folder
 def primes_fast(N):
     """Compute the first N primes."""
     primes_list = [2]
     current = 3
     while len(primes_list) < N:
         isprime = True
-        for i in range(2,int(np.sqrt(current))+1):
+        for i in range(3,int(np.sqrt(current))+1):
             if current % i == 0:
                 isprime = False
                 break
@@ -235,9 +237,9 @@ def prob7(n=10):
         np.linalg.matrix_power(A,n)
         np_power.append(time() - start)
     
-    plt.plot(sizes, naive_power, 'r')
-    plt.plot(sizes, jit_power, 'm')
-    plt.plot(sizes, np_power, 'k')
+    plt.loglog(sizes, naive_power, 'r')
+    plt.loglog(sizes, jit_power, 'm')
+    plt.loglog(sizes, np_power, 'k')
     plt.title(f'A**{n} for various sizes')
     plt.xlabel('size')
     plt.ylabel('time')
@@ -275,8 +277,5 @@ if __name__ == "__main__":
 
     # for i in prime_sieve():
     #     print(i)
-
-    A = np.random.random((4,4))
-    print(A)
 
     prob7()

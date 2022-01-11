@@ -219,4 +219,4 @@ if __name__ == "__main__":
     nate = "/Users/chase/Downloads/img_2879.jpg"
     hub_grey = "hubble_gray.jpg"
 
-    compress_image(nate, 100)
+    compress_image(hubble, 100)
