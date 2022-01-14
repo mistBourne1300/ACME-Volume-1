@@ -1,0 +1,38 @@
+01/13/22 17:26
+
+Problem 1 (5 points):
+Score += 5
+
+Problem 2 (5 points):
+Score += 5
+
+Problem 3 (5 points):
+You need to also plot e^(-y^2) along with MacLaurin series, also add a title please
+Same thing as previous, add e^(-y^2)
+Score += 3
+
+Problem 4 (5 points):
+Score += 5
+
+Problem 5 (5 points):
+Score += 5
+
+Problem 6 (10 points):
+IndexError: Replacement index 1 out of range for positional args tuple
+
+Problem 7 (10 points):
+Incorrect integral when r = 2
+Score += 5
+
+Code Quality (5 points):
+Didn't see any comments
+Score += 4
+
+Total score: 32/50 = 64.0%
+
+
+Comments:
+	Good job!
+
+-------------------------------------------------------------------------------
+
