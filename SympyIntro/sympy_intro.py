@@ -220,5 +220,5 @@ if __name__ == "__main__":
     # prob4()
     # print(prob5())
     # print(prob6())
-    # print(prob7())
+    print(prob7())
     pass
