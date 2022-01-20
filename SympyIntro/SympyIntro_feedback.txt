@@ -36,3 +36,41 @@ Comments:
 
 -------------------------------------------------------------------------------
 
+01/18/22 10:19
+
+Problem 1 (5 points):
+Score += 5
+
+Problem 2 (5 points):
+Score += 5
+
+Problem 3 (5 points):
+Score += 5
+
+Problem 4 (5 points):
+Score += 5
+
+Problem 5 (5 points):
+Score += 5
+
+Problem 6 (10 points):
+Incorrect minima
+Incorrect maxima
+Score += 5
+
+Problem 7 (10 points):
+Score += 10
+
+Code Quality (5 points):
+Score += 5
+
+Total score: 45/50 = 90.0%
+
+Great job!
+
+
+Comments:
+	Awesome!
+
+-------------------------------------------------------------------------------
+
