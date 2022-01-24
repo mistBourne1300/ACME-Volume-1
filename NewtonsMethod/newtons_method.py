@@ -5,6 +5,12 @@
 <Date>
 """
 
+from hashlib import new
+import matplotlib.pyplot as plt
+import numpy as np
+import scipy
+from scipy.optimize import newton
+
 
 # Problems 1, 3, and 5
 def newton(f, x0, Df, tol=1e-5, maxiter=15, alpha=1.):
@@ -24,7 +30,16 @@ def newton(f, x0, Df, tol=1e-5, maxiter=15, alpha=1.):
         (bool): Whether or not Newton's method converged.
         (int): The number of iterations computed.
     """
-    raise NotImplementedError("Problem 1 Incomplete")
+    x1 = x0 - f(x0)/Df(x0)
+    counter = 1
+    while np.abs(x1-x0) > tol:
+        x0 = x1
+        x1 = x0 - f(x0)/Df(x0)
+        counter += 1
+        if counter > maxiter:
+            return x1, False, counter
+    return x1, True, counter
+
 
 
 # Problem 2
@@ -98,3 +113,15 @@ def plot_basins(f, Df, zeros, domain, res=1000, iters=15):
         iters (int): The exact number of times to iterate Newton's method.
     """
     raise NotImplementedError("Problem 7 Incomplete")
+
+
+if __name__ == "__main__":
+    f = lambda x: x**5 - 3
+    df = lambda x: 5*x**4
+
+    soln = newton(f, 1, df, maxiter=100, tol = 1e-10)
+    print(soln)
+    print(f'f(soln): {f(soln[0])}')
+    # domain = np.linspace(-1,2)
+    # plt.plot(domain, f(domain), 'k')
+    # plt.show()

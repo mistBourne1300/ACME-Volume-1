@@ -90,6 +90,9 @@ def prob3(x0):
     plt.loglog(haghtches, cdq2e)
     plt.loglog(haghtches, cdq4e)
     plt.legend(['fdq1e', 'fdq2e', 'bdq1e', 'bdq2e', 'cdq2e', 'cdq4e'])
+    plt.xlabel('h-value')
+    plt.ylabel('absolute error')
+    plt.title('error v h-value')
     plt.show()
 
 
@@ -163,7 +166,7 @@ def jacobian_cdq2(f, x, h=1e-5):
     """
     I = np.identity(len(x))
     Jacob = []
-    for i in range(len(f([0,0]))):
+    for i in range(len(f(x))):
         ithrow = []
         for ej in I:
             ithrow.append((f(x+h*ej)[i] - f(x-h*ej)[i])/(2*h))
@@ -193,12 +196,10 @@ def prob6():
     over the domain [-1,1] for n=0,1,2,3,4.
     """
     domain = anp.array(np.linspace(-1,1))
-    for i in range(6):
-        plt.subplot(2,3,i+1)
-        plt.plot(domain, cheb_poly(domain,i), 'k')
+    for i in range(5):
+        plt.plot(domain, cheb_poly(domain,i))
         deriv = ewok(cheb_poly)
-        plt.plot(domain, deriv(domain, i), 'r')
-    
+        plt.plot(domain, deriv(domain, i))
     plt.show()
 
 
@@ -256,9 +257,6 @@ def prob7(N=200):
     plt.show()
 
 
-    raise NotImplementedError("Problem 7 Incomplete")
-
-
 if __name__ == "__main__":
     # os.chdir("/Users/chase/Desktop/Math345Volume1/byu_vol1/Differentiation")
     # prob1()
@@ -279,8 +277,8 @@ if __name__ == "__main__":
 
     # print(prob4())
 
-    # f = lambda x: np.array([x[0] + x[1], x[0] * x[1]**2])
-    # print(jacobian_cdq2(f,np.array([1,1])))
+    # f = lambda x: np.array([x[0] + x[1], x[0] * x[1]**2], x[2])
+    # print(jacobian_cdq2(f,np.array([1,1, 0])))
 
     # prob6()
     # prob7()
