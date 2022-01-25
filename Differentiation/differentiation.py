@@ -258,7 +258,7 @@ def prob7(N=200):
 
 
 if __name__ == "__main__":
-    # os.chdir("/Users/chase/Desktop/Math345Volume1/byu_vol1/Differentiation")
+    os.chdir("/Users/chase/Desktop/Math345Volume1/byu_vol1/Differentiation")
     # prob1()
 
     # domain = np.linspace(-np.pi, np.pi, 1000)
@@ -275,7 +275,7 @@ if __name__ == "__main__":
 
     # prob3(1)
 
-    # print(prob4())
+    print(prob4())
 
     # f = lambda x: np.array([x[0] + x[1], x[0] * x[1]**2], x[2])
     # print(jacobian_cdq2(f,np.array([1,1, 0])))
