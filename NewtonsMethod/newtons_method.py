@@ -6,6 +6,7 @@
 """
 
 from hashlib import new
+from matplotlib.cbook import maxdict
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy import linalg as la
@@ -124,13 +125,17 @@ def prob6():
     zero55 = np.array([3.75, .25])
     zero11 = np.array([0,1])
     zero12 = np.array([0,-1])
-    x0 = None
     for x in exxes:
         for y in whys:
             x0 = np.array([x,y])
             print(f'testing {x0}')
             try:
-                if (np.allclose(newton(f, x0, df, alpha = 1)[0], zero11) or np.allclose(newton(f, x0, df, alpha = 1)[0], zero12)) and np.allclose(newton(f, x0, df, alpha = .55)[0], zero55):
+                try55 = newton(f, x0, df, alpha = .55, maxiter = 100)
+                try1 = newton(f, x0, df, alpha = 1, maxiter = 100)
+                if not try55[1] or not try1[1]:
+                    print("\tdid not converge, continuing")
+                    continue
+                if (np.allclose(try1[0], zero11) or np.allclose(try1[0], zero12)) and np.allclose(try55[0], zero55):
                     return x0
             except:
                 print("\tmatrix was singular")
@@ -206,18 +211,18 @@ if __name__ == "__main__":
 
     # test5()
 
-    # x0 = prob6()
-    # f = lambda x: anp.array([5*x[1]*x[0] - x[0]*(1+x[1]), -x[0]*x[1] + (1-x[1])*(1 + x[1])])
-    # df = jacobian(f)
-    # print(f'.55: {newton(f,x0,df, alpha = .55)}\n1:{newton(f,x0,df)}')
+    x0 = prob6()
+    f = lambda x: anp.array([5*x[1]*x[0] - x[0]*(1+x[1]), -x[0]*x[1] + (1-x[1])*(1 + x[1])])
+    df = jacobian(f)
+    print(f'.55: {newton(f,x0,df, alpha = .55, maxiter = 100)}\n1:{newton(f,x0,df, maxiter = 100)}')
 
     # This is how I called problem 7 to test.
-    f = lambda x: x**3 -1
-    Df = lambda x: 3*x**2
+    # f = lambda x: x**3 -1
+    # Df = lambda x: 3*x**2
 
-    plot_basins(f,Df,np.array((1,
-            -.5+.866025j,-.5-.866025j
-    )),[-1,1,-1,1])
+    # plot_basins(f,Df,np.array((1,
+    #         -.5+.866025j,-.5-.866025j
+    # )),[-1,1,-1,1])
     # This will give you the zeros and the derivative without Autograd
 
     pass
