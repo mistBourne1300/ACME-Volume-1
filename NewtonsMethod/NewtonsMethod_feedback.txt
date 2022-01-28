@@ -1,0 +1,72 @@
+01/27/22 19:13
+
+Problem 1 (5 points):
+Score += 5
+
+Problem 2 (5 points):
+Score += 5
+
+Problem 3 (5 points):
+Score += 5
+
+Problem 4 (5 points):
+NameError: name 'df' is not defined
+
+Problem 5 (5 points):
+Score += 5
+
+Problem 6 (10 points):
+prob6() failed: starting point does not converge to [3.75, .25] with backtracking
+Score += 5
+
+Problem 7 (10 points):
+Score += 10
+
+Code Quality (5 points):
+Didn't see any comments
+Score += 4
+
+Total score: 39/50 = 78.0%
+
+
+Comments:
+	Almost there!
+
+-------------------------------------------------------------------------------
+
+01/27/22 19:31
+
+Problem 1 (5 points):
+Score += 5
+
+Problem 2 (5 points):
+Score += 5
+
+Problem 3 (5 points):
+Score += 5
+
+Problem 4 (5 points):
+NameError: name 'df' is not defined
+
+Problem 5 (5 points):
+Score += 5
+
+Problem 6 (10 points):
+prob6() failed: starting point does not converge to [3.75, .25] with backtracking
+Score += 5
+
+Problem 7 (10 points):
+Score += 10
+
+Code Quality (5 points):
+Didn't see any comments
+Score += 4
+
+Total score: 39/50 = 78.0%
+
+
+Comments:
+	Almost there!
+
+-------------------------------------------------------------------------------
+
