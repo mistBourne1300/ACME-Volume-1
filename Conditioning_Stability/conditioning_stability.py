@@ -5,14 +5,20 @@
 <Date>
 """
 
+import os
 import numpy as np
 import sympy as sy
+from scipy import linalg as la
+import matplotlib.pyplot as plt
 
 
 # Problem 1
 def matrix_cond(A):
     """Calculate the condition number of A with respect to the 2-norm."""
-    raise NotImplementedError("Problem 1 Incomplete")
+    sing_vals = la.svdvals(A)
+    if sing_vals[-1] == 0:
+        return np.inf
+    return sing_vals[0]/sing_vals[-1]
 
 
 # Problem 2
@@ -33,8 +39,19 @@ def prob2():
     x, i = sy.symbols('x i')
     w = sy.poly_from_expr(sy.product(x-i, (i, 1, 20)))[0]
     w_coeffs = np.array(w.all_coeffs())
+    real_roots = np.roots(w_coeffs)
+    plt.plot(real_roots.real, real_roots.imag, 'ro')
 
-    raise NotImplementedError("Problem 2 Incomplete")
+    cond_numbers = []
+    rel_cond_numbers = []
+    for i in range(100):
+        pirates = np.random.normal(loc = 1, scale = 1e-10, size = len(w_coeffs))
+        roots = np.roots(w_coeffs*pirates)
+        plt.plot(roots.real, roots.imag, 'k,')
+        cond_numbers.append(la.norm(roots - real_roots, np.inf)/la.norm(pirates, np.inf))
+        rel_cond_numbers.append(cond_numbers[-1]*la.norm(w_coeffs, np.inf)/la.norm(real_roots, np.inf))
+    plt.show()
+    return np.mean(cond_numbers), np.mean(rel_cond_numbers)
 
 
 # Helper function
@@ -69,7 +86,14 @@ def eig_cond(A):
         (float) The absolute condition number of the eigenvalue problem at A.
         (float) The relative condition number of the eigenvalue problem at A.
     """
-    raise NotImplementedError("Problem 3 Incomplete")
+    reals = np.random.normal(0, 1e-10, A.shape)
+    imags = np.random.normal(0, 1e-10, A.shape)
+    H = reals + 1j*imags
+    _A_ = A + H
+    orig_eigvals = la.eigvals(A)
+    pert_eigvals  = reorder_eigvals(orig_eigvals, la.eigvals(_A_))
+    kappa_hat = la.norm(orig_eigvals - pert_eigvals, ord = 2)/la.norm(H, ord = 2)
+    return kappa_hat, kappa_hat * la.norm(A, ord = 2)/la.norm(orig_eigvals, ord = 2)
 
 
 # Problem 4
@@ -83,7 +107,15 @@ def prob4(domain=[-100, 100, -100, 100], res=50):
         domain ([x_min, x_max, y_min, y_max]):
         res (int): number of points along each edge of the grid.
     """
-    raise NotImplementedError("Problem 4 Incomplete")
+    exxes = np.linspace(domain[0], domain[1], res)
+    whys = np.linspace(domain[2], domain[3], res)
+    EXXES, WHYS = np.meshgrid(exxes, whys)
+    cond_numbers = np.zeros((res,res))
+    for i,x in enumerate(exxes):
+        for j,y in enumerate(whys):
+            cond_numbers[i][j] = eig_cond(np.array([[1,x],[y,1]]))[1]
+    plt.pcolormesh(EXXES, WHYS, cond_numbers, cmap = 'inferno')
+    plt.show()
 
 
 # Problem 5
@@ -101,7 +133,25 @@ def prob5(n):
         (float): The forward error using the normal equations.
         (float): The forward error using the QR decomposition.
     """
-    raise NotImplementedError("Problem 5 Incomplete")
+    xk, yk = np.load("stability_data.npy").T
+    A = np.vander(xk, n+1)
+
+    x_unstable = la.inv(A.T@A)@A.T@yk
+    domain = np.linspace(0,1, 1000)
+    plt.plot(domain, np.polyval(x_unstable, domain), 'k')
+
+
+    Q,R = la.qr(A, mode ='economic')
+    x_stable = la.solve_triangular(R, Q.T@yk)
+
+    plt.plot(domain, np.polyval(x_stable,domain), 'goldenrod')
+
+    plt.plot(xk,yk,'ro', markersize = 1)
+    plt.legend(['unstable', 'stable', 'original points'])
+    plt.title("unstable vs stable least squares")
+    plt.show()
+
+    return la.norm(A@x_unstable - yk), la.norm(A@x_stable - yk)
 
 
 # Problem 6
@@ -111,4 +161,47 @@ def prob6():
     Plot the relative forward error of the subfactorial formula for each
     value of n. Use a log scale for the y-axis.
     """
-    raise NotImplementedError("Problem 6 Incomplete")
+    enns = np.arange(1,11)*5
+    for_errs = []
+    for n in enns:
+        n0 = int(n)
+        x = sy.symbols('x')
+        expr = x**n0 * sy.exp(x-1)
+        true_I = sy.integrate(expr, (x,0,1))
+
+        fake_I = (-1)**n * (sy.subfactorial(n0) - sy.factorial(n0)/np.e)
+
+        for_errs.append(np.abs(true_I - fake_I)/np.abs(true_I))
+
+    plt.plot(enns, for_errs, 'goldenrod')
+    plt.yscale('log')
+    plt.title("Errors")
+    plt.xlabel("n value")
+    plt.ylabel("Error")
+    plt.show()
+
+
+if __name__ == "__main__":
+    # problem 1
+    # A = np.random.rand(4,4)
+    # print(A)
+    # Q,R = la.qr(A)
+    # print(matrix_cond(Q))
+
+    # problem 2
+    # print(prob2())
+
+    # problem 3
+    # A = np.random.rand(4,4)
+    # print(eig_cond(A))
+
+    # problem 4
+    # prob4(res = 200)
+
+    # problem 5
+    # os.chdir("/Users/chase/Desktop/Math345Volume1/byu_vol1/Conditioning_Stability")
+    # print(prob5(5))
+
+    # problem 6
+    # prob6()
+    pass
