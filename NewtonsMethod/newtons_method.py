@@ -35,7 +35,7 @@ def newton(f, x0, Df, tol=1e-5, maxiter=15, alpha=1.):
     """
     if np.isscalar(x0):
         x1 = x0 - alpha*f(x0)/Df(x0)
-        counter = 1
+        counter = 0
         while np.abs(x1-x0) > tol:
             x0 = x1
             x1 = x0 - alpha*f(x0)/Df(x0)
@@ -45,15 +45,15 @@ def newton(f, x0, Df, tol=1e-5, maxiter=15, alpha=1.):
         return x1, True, counter
     else:
         x1 = x0 - alpha*la.solve(Df(x0), f(x0))
-        counter = 1
-        while la.norm(x1-x0) > tol:
+        counter = 0
+        while counter < maxiter:
             x0 = x1
             x1 = x0 - alpha*la.solve(Df(x0), f(x0))
             counter += 1
-            if counter > maxiter:
-                return x1, False, counter
+            if la.norm(x0-x1) < tol:
+                return x1, True, counter
         
-        return x1, True, counter
+        return x1, False, counter
 
 
 
@@ -103,7 +103,7 @@ def optimal_alpha(f, x0, Df, tol=1e-5, maxiter=15):
     newtons_cradle = np.vectorize(newton, excluded = ['f', 'x0', 'Df', 'tol', 'maxiter'])
     plt.plot(alphas, newtons_cradle(f, x0, Df, tol, maxiter, alphas)[2])
     plt.show()
-    return alphas[np.argmin(newtons_cradle(f,x0,df, tol, maxiter, alphas)[2])]
+    return alphas[np.argmin(newtons_cradle(f,x0,Df, tol, maxiter, alphas)[2])]
 
 
 
@@ -120,22 +120,25 @@ def prob6():
     """
     f = lambda x: anp.array([5*x[1]*x[0] - x[0]*(1+x[1]), -x[0]*x[1] + (1-x[1])*(1 + x[1])])
     df = jacobian(f)
-    exxes = np.linspace(-1/4., -.01)
-    whys = np.linspace(0.01,1/4.)
-    zero55 = np.array([3.75, .25])
-    zero11 = np.array([0,1])
-    zero12 = np.array([0,-1])
+    exxes = anp.linspace(-1/4.,0)
+    whys = anp.linspace(0,1/4.)
+    zero55 = anp.array([3.75, .25])
+    zero11 = anp.array([0,1])
+    zero12 = anp.array([0,-1])
     for x in exxes:
         for y in whys:
-            x0 = np.array([x,y])
-            print(f'testing {x0}')
+            x0 = anp.array([x,y])
+            # print(f'testing {x0}')
             try:
-                try55 = newton(f, x0, df, alpha = .55, maxiter = 100)
-                try1 = newton(f, x0, df, alpha = 1, maxiter = 100)
+                try55 = newton(f, x0, df, alpha = .55)
+                try1 = newton(f, x0, df, alpha = 1)
+                # print(try55)
                 if not try55[1] or not try1[1]:
-                    print("\tdid not converge, continuing")
+                    # print("\tdid not converge, continuing")
+                    # print(try1)
+                    # print(try1)
                     continue
-                if (np.allclose(try1[0], zero11) or np.allclose(try1[0], zero12)) and np.allclose(try55[0], zero55):
+                if (anp.allclose(try1[0], zero11) or anp.allclose(try1[0], zero12)) and anp.allclose(try55[0], zero55):
                     return x0
             except:
                 print("\tmatrix was singular")
@@ -201,20 +204,21 @@ if __name__ == "__main__":
 
 
     f = lambda x: np.sign(x) * np.power(np.abs(x), 1./3)
-    df = grad(f)
+    # df = grad(f)
     # print(f'a = 1: {newton(f, 0.1, df)}')
     # print(f'a = .4: {newton(f, 0.1, df, alpha = .4)}')
 
     # print(optimal_alpha(f, .1, df))
 
-    f = lambda x: np.array([x[0]**2 + x[1]**2, x[0]+x[1]])
+    # f = lambda x: np.array([x[0]**2 + x[1]**2, x[0]+x[1]])
 
     # test5()
 
-    x0 = prob6()
-    f = lambda x: anp.array([5*x[1]*x[0] - x[0]*(1+x[1]), -x[0]*x[1] + (1-x[1])*(1 + x[1])])
-    df = jacobian(f)
-    print(f'.55: {newton(f,x0,df, alpha = .55, maxiter = 100)}\n1:{newton(f,x0,df, maxiter = 100)}')
+    # x0 = prob6()
+    # print(f'x0: {x0}')
+    # f = lambda x: anp.array([5*x[1]*x[0] - x[0]*(1+x[1]), -x[0]*x[1] + (1-x[1])*(1 + x[1])])
+    # df = jacobian(f)
+    # print(f'.55: {newton(f,x0,df, alpha = .55)}\n1:{newton(f,x0,df)}')
 
     # This is how I called problem 7 to test.
     # f = lambda x: x**3 -1
