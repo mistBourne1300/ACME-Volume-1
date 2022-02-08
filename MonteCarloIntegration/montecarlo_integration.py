@@ -121,22 +121,27 @@ def prob4():
     - Plot the relative error against the sample size N on a log-log scale.
         Also plot the line 1 / sqrt(N) for comparison.
     """
-
+    # get dimension and define f
     n = 4
     f = lambda x: 1/((2*np.pi)**(len(x)/2)) * np.exp(-np.dot(x,x)/2)
 
+    # mins and maxes of the integral
     mins = np.array([-3/2, 0, 0, 0])
     maxes = np.array([3/4, 1, 1/2, 1])
 
+    # get the "true" value of 
     means, cov = np.zeros(n), np.eye(n)
     treu = stats.mvn.mvnun(mins, maxes, means, cov)[0]
     eNNs = np.logspace(1,5, 20, base = 10, dtype = int)
     errs = []
-    print(eNNs)
+
+    # calculate the relative errors
     for N in eNNs:
         _F_ = mc_integrate(f, mins, maxes, N = N)
+        print(_F_)
         errs.append(np.abs(treu - _F_)/np.abs(treu))
 
+    # plot the relative errors
     plt.loglog(eNNs, errs)
     plt.loglog(eNNs, 1/np.sqrt(eNNs))
     plt.title("Relative Error in Monte Carlo Integration")
