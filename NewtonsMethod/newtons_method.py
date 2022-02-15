@@ -221,12 +221,12 @@ if __name__ == "__main__":
     # print(f'.55: {newton(f,x0,df, alpha = .55)}\n1:{newton(f,x0,df)}')
 
     # This is how I called problem 7 to test.
-    # f = lambda x: x**3 -1
-    # Df = lambda x: 3*x**2
+    f = lambda x: x**3 -1
+    Df = lambda x: 3*x**2
 
-    # plot_basins(f,Df,np.array((1,
-    #         -.5+.866025j,-.5-.866025j
-    # )),[-1,1,-1,1])
+    plot_basins(f,Df,np.array((1,
+            -.5+.866025j,-.5-.866025j
+    )),[-1,1,-1,1])
     # This will give you the zeros and the derivative without Autograd
 
     pass
