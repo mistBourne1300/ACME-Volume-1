@@ -159,7 +159,8 @@ def rank_websites(filename="web_stanford.txt", epsilon=0.85):
             Adj[Arow, Acol] = 1
       
     page_rank_dict = DiGraph(Adj,labels).itersolve(epsilon=epsilon)
-    return get_ranks(page_rank_dict)
+    prelim = [str(i) for i in get_ranks(page_rank_dict)]
+    return prelim
 
 
 # Problem 5
