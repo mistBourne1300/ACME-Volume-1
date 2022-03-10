@@ -237,14 +237,16 @@ def rank_actors(filename="top250movies.txt", epsilon=0.85):
 
 
 if __name__ == "__main__":
-    # A = np.array([  [0,0,0,0],
-    #                 [1,0,1,0],
-    #                 [1,0,0,1],
-    #                 [1,0,1,0]])
-    # directedgraphsolverthing = DiGraph(A, labels = ['a','b','c','d'])
-    # print(get_ranks(directedgraphsolverthing.itersolve()))
-    # print(rank_websites()[:10])
-    # print(rank_ncaa_teams("ncaa2010.csv")[:5])
-    # print(rank_actors(epsilon=0.7)[:5])
+    A = np.array([  [0,0,0,0],
+                    [1,0,1,0],
+                    [1,0,0,1],
+                    [1,0,1,0]])
+    directedgraphsolverthing = DiGraph(A, labels = ['a','b','c','d'])
+    print(directedgraphsolverthing.eigensolve())
+    print(directedgraphsolverthing.itersolve())
+    print(get_ranks(directedgraphsolverthing.itersolve()))
+    print(rank_websites()[:10])
+    print(rank_ncaa_teams("ncaa2010.csv")[:5])
+    print(rank_actors(epsilon=0.7)[:5])
     pass
 
