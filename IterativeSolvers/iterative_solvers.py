@@ -237,7 +237,7 @@ def prob7():
     omegas = np.arange(1,1.95,step=.05)
     num_itrs = []
     for w in omegas:
-        print(f'omega: {w}',end = "\r")
+        # print(f'omega: {w}',end = "\r")
         u,converged,iter = hot_plate(20, w, tol = 1e-2, maxiter = 1000)
         num_itrs.append(iter)
     plt.plot(omegas, num_itrs)

@@ -5,7 +5,6 @@
 <Date>
 """
 
-from random import getrandbits
 import networkx as nx
 import numpy as np
 from scipy import linalg as la
