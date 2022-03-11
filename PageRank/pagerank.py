@@ -71,7 +71,7 @@ class DiGraph:
         w,v = la.eig(B)
         index1 = np.argmax(w)
         p = v[:,index1]
-        p = p/np.linalg.norm(p, ord = 1)
+        p = p/np.sum(p)
         return {self.labels[i]:p[i] for i in range(len(p))}
 
     # Problem 2
@@ -194,16 +194,16 @@ def rank_ncaa_teams(filename, epsilon=0.85):
     file.close()
     teams = get_unique(lines)
 
-    adj = np.zeros((len(teams), len(teams)))
+    adjective = np.zeros((len(teams), len(teams)))
     for line in lines:
         line = line.strip().split(',')
         if(len(line) != 2):
             raise ValueError(f'{line} does not have two arguments')
         col = teams.index(line[1]) # loser gets the column
         row = teams.index(line[0]) # winner gets the row
-        adj[row,col] += 1
+        adjective[row,col] += 1
     
-    page_rank_dict = DiGraph(adj,teams).itersolve(epsilon=epsilon)
+    page_rank_dict = DiGraph(adjective,teams).itersolve(epsilon=epsilon)
     return get_ranks(page_rank_dict)
     
 
