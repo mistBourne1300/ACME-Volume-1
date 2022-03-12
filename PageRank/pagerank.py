@@ -140,7 +140,7 @@ def rank_websites(filename="web_stanford.txt", epsilon=0.85):
                 unique_labels.add(int(ID))
         unique_labels = list(unique_labels)
         unique_labels.sort()
-        return unique_labels
+        return [str(i) for i in unique_labels[::-1]]
     
     file = open(filename)
     lines = file.readlines()
@@ -150,15 +150,15 @@ def rank_websites(filename="web_stanford.txt", epsilon=0.85):
 
     for line in lines:
         line = line.strip().split('/')
-        frompage = int(line[0])
+        frompage = line[0]
         Acol = labels.index(frompage) # get the index of the column 
         for ID in line[1:]:
-            ID = int(ID)
+            ID = ID
             Arow = labels.index(ID)
             Adj[Arow, Acol] = 1
       
     page_rank_dict = DiGraph(Adj,labels).itersolve(epsilon=epsilon)
-    prelim = [str(i) for i in get_ranks(page_rank_dict)]
+    prelim = [i for i in get_ranks(page_rank_dict)]
     return prelim
 
 
@@ -237,16 +237,16 @@ def rank_actors(filename="top250movies.txt", epsilon=0.85):
 
 
 if __name__ == "__main__":
-    A = np.array([  [0,0,0,0],
-                    [1,0,1,0],
-                    [1,0,0,1],
-                    [1,0,1,0]])
-    directedgraphsolverthing = DiGraph(A, labels = ['a','b','c','d'])
-    print(directedgraphsolverthing.eigensolve())
-    print(directedgraphsolverthing.itersolve())
-    print(get_ranks(directedgraphsolverthing.itersolve()))
-    print(rank_websites()[:10])
-    print(rank_ncaa_teams("ncaa2010.csv")[:5])
-    print(rank_actors(epsilon=0.7)[:5])
+    # A = np.array([  [0,0,0,0],
+    #                 [1,0,1,0],
+    #                 [1,0,0,1],
+    #                 [1,0,1,0]])
+    # directedgraphsolverthing = DiGraph(A, labels = ['a','b','c','d'])
+    # print(directedgraphsolverthing.eigensolve())
+    # print(directedgraphsolverthing.itersolve())
+    # print(get_ranks(directedgraphsolverthing.itersolve()))
+    print(rank_websites(epsilon=0.75)[:20])
+    # print(rank_ncaa_teams("ncaa2010.csv")[:5])
+    # print(rank_actors(epsilon=0.7)[:5])
     pass
 
