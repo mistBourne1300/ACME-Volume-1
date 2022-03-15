@@ -21,7 +21,8 @@ def diag_dom(n, num_entries=None, as_sparse=False):
         as_sparse: If True, an equivalent sparse CSR matrix is returned.
     Returns:
         A ((n,n) ndarray): A (n, n) strictly diagonally dominant matrix.
-"""
+    """
+    # 
     if num_entries is None:
         num_entries = int(n**1.5) - n
     A = sparse.dok_matrix((n,n))
