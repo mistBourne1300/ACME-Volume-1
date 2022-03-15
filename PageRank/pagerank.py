@@ -273,6 +273,6 @@ if __name__ == "__main__":
     # print(get_ranks(directedgraphsolverthing.itersolve()))
     print(rank_websites(epsilon=0.75)[:21])
     # print(rank_ncaa_teams("ncaa2010.csv")[:5])
-    # print(rank_actors(epsilon=0.7)[:5])
+    print(rank_actors(epsilon=0.7)[:5])
     pass
 
