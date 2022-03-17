@@ -34,3 +34,39 @@ Comments:
 
 -------------------------------------------------------------------------------
 
+03/17/22 17:36
+
+Problem 1 (10 points):
+Score += 10
+
+Problem 2 (5 points):
+Score += 5
+
+Problem 3 (10 points):
+Score += 10
+
+Problem 4 (5 points):
+Score += 5
+
+Problem 5 (5 points):
+Score += 5
+
+Problem 6 (5 points):
+Score += 5
+
+Problem 7 (5 points):
+TimeoutError: Timeout after 30 seconds
+
+Code Quality (5 points):
+Score += 5
+
+Total score: 45/50 = 90.0%
+
+Great job!
+
+
+Comments:
+	Great job!
+
+-------------------------------------------------------------------------------
+
