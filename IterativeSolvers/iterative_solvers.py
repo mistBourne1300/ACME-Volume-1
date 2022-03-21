@@ -220,7 +220,7 @@ def hot_plate(n, omega, tol=1e-8, maxiter=100, plot=False):
     smallb[0] = -100
     smallb[-1] = -100
     b = np.tile(smallb,n)
-    u, converged, iter = sor(generate_A().tocsr(),b,omega)
+    u, converged, iter = sor(generate_A().tocsr(),b,omega=omega, tol = tol, maxiter = maxiter)
     # comment because Kolton told me to 
     if plot:
         U = u.reshape((n,n))
