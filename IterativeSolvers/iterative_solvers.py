@@ -21,7 +21,6 @@ def diag_dom(n, num_entries=None, as_sparse=False):
     Returns:
         A ((n,n) ndarray): A (n, n) strictly diagonally dominant matrix.
     """
-    # 
     if num_entries is None:
         num_entries = int(n**1.5) - n
     A = sparse.dok_matrix((n,n))
@@ -48,13 +47,17 @@ def jacobi(A, b, tol=1e-8, maxiter=100, plot=False):
     Returns:
         ((n,) ndarray): The solution to system Ax = b.
     """
+    # get the diagonals and create a the zero vector
     d = np.diag(A)
     x0=np.zeros(b.shape)
     errs = []
     for i in range(maxiter):
+        # update the vector
         x1 = x0 + (b-A@x0)/d
+        # if we're plotting, add to the errors vector
         if plot:
             errs.append(np.linalg.norm(A@x1 - b, ord = np.inf))
+        # if the norm is within tolerance, we're done, plot and return 
         if np.linalg.norm(x1-x0,ord = np.inf)<tol:
             if plot:
                 plt.semilogy(errs)
@@ -64,8 +67,11 @@ def jacobi(A, b, tol=1e-8, maxiter=100, plot=False):
                 plt.show()
 
             return x1
+        
+        # update x0
         x0 = x1
     
+    # plot and return anyway
     if plot:
         plt.semilogy(errs)
         plt.title("convergence of Jacobi Method")
@@ -89,16 +95,20 @@ def gauss_seidel(A, b, tol=1e-8, maxiter=100, plot=False):
     Returns:
         x ((n,) ndarray): The solution to system Ax = b.
     """
+    # zero vector
     x0 = np.zeros(b.shape)
     errs = []
     for i in range(maxiter):
+        # copycat vector
         x1 = x0.copy()
+        #update the vector one index at a time
         for j in range(len(x1)):
             x1[j] = x1[j] + (b[j] - A[j,:]@x1)/A[j,j]
         
-
+        # add to errors if we're plotting
         if plot:
             errs.append(np.linalg.norm(A@x1 - b,ord = np.inf))
+        # if the norm is within tolerance, plot and return
         if np.linalg.norm(x1 - x0, ord = np.inf) < tol:
             if plot:
                 plt.semilogy(errs)
@@ -108,9 +118,10 @@ def gauss_seidel(A, b, tol=1e-8, maxiter=100, plot=False):
                 plt.show()
             return x1
         
+        # update x0
         x0 = x1
 
-
+    # plot and return anyway
     if plot:
         plt.semilogy(errs)
         plt.title("convergence of Jacobi Method")
@@ -134,21 +145,28 @@ def gauss_seidel_sparse(A, b, tol=1e-8, maxiter=100):
     Returns:
         x ((n,) ndarray): The solution to system Ax = b.
     """
+    # zero vector
     x0 = np.zeros(b.shape)
     for i in range(maxiter):
+        # copycat vector
         x1 = x0.copy()
         for j in range(len(x1)):
+            # get the rowstart and rowend
             rowstart = A.indptr[j]
             rowend = A.indptr[j+1]
 
+            # update the vector one component at a time
             Aix = A.data[rowstart:rowend] @ x1[A.indices[rowstart:rowend]]
             x1[j] = x1[j] + (b[j] - Aix)/A[j,j]
         
+        # if norm is within tol, we're done
         if np.linalg.norm(x1 - x0, ord = np.inf) < tol:
             return x1
         
+        # update x0
         x0 = x1
     
+    # return anyway
     return x1
 
 
@@ -169,21 +187,28 @@ def sor(A, b, omega, tol=1e-8, maxiter=100):
         (bool): Whether or not Newton's method converged.
         (int): The number of iterations computed.
     """
+    # zero vector
     x0 = np.zeros(b.shape)
     for i in range(maxiter):
+        # copycat vector
         x1 = x0.copy()
         for j in range(len(x1)):
+            # get rowstart and rowend
             rowstart = A.indptr[j]
             rowend = A.indptr[j+1]
 
+            # update the vector one component at a time (omega included)
             Aix = A.data[rowstart:rowend] @ x1[A.indices[rowstart:rowend]]
             x1[j] = x1[j] + omega*(b[j] - Aix)/A[j,j]
         
+        # if the norm is less than tol, we're done
         if np.linalg.norm(x1 - x0, ord = np.inf) < tol:
             return x1, True, i
         
+        # update x0
         x0 = x1
     
+    # return anyway
     return x1, False, i
 
 
@@ -205,6 +230,7 @@ def hot_plate(n, omega, tol=1e-8, maxiter=100, plot=False):
         (bool): Whether or not Newton's method converged.
         (int): The number of computed iterations in SOR.
     """
+    # helper function to generate the A matrix
     def generate_A():
         diagonals = [1,-4,1]
         offsets = [-1,0,1]
@@ -215,12 +241,16 @@ def hot_plate(n, omega, tol=1e-8, maxiter=100, plot=False):
         A.setdiag(1,n)
         return A
     
+    # create a small piece of the b vector, then us np.tile to make the rest of it
     smallb = np.zeros(n)
     smallb[0] = -100
     smallb[-1] = -100
     b = np.tile(smallb,n)
+    
+    # get the u vector, the convergent state, and the iteration count from the sor method
     u, converged, iter = sor(generate_A().tocsr(),b,omega=omega, tol = tol, maxiter = maxiter)
-    # comment because Kolton told me to 
+    
+    # plot and return
     if plot:
         U = u.reshape((n,n))
         plt.pcolormesh(U,cmap='coolwarm')
@@ -234,18 +264,23 @@ def prob7():
     and maxiter = 1000 with A and b generated with n=20. Plot the iterations
     computed as a function of omega.
     """
+    # all the omegas we are testing
     omegas = np.arange(1,2,step=.05)
+    # vector to hold the iterations
     num_iters = []
     for w in omegas:
-        print(f'{w:.2f}', end=":\n\t")
+        # get the iterations used for the particular omega and append to num_iters vector
         u,converged,iter = hot_plate(20, w, tol = 1e-2, maxiter = 1000)
-        print(f'{iter}')
         num_iters.append(iter)
+    
+    # plot the iterations vs the omegas
     plt.plot(omegas, num_iters)
     plt.title("iterations vs omega")
     plt.xlabel("omega")
     plt.ylabel("iterations")
     plt.show()
+
+    # return the minimum omega value
     return omegas[np.argmin(num_iters)]
 
 
