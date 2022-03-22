@@ -4,8 +4,11 @@
 <Class>
 <Date>
 """
+
+import matplotlib.pyplot as plt
 import sqlite3 as sql
 import csv
+import numpy as np
 
 # Problems 1, 2, and 4
 def student_db(db_file="students.db", student_info="student_info.csv",
@@ -70,18 +73,19 @@ def student_db(db_file="students.db", student_info="student_info.csv",
                 rows = list(csv.reader(infile))
 
             cur.executemany("INSERT INTO StudentGrades VALUES (?,?,?);", rows)
+            cur.execute("UPDATE StudentInfo SET MajorID=NULL WHERE MajorID==-1;")
 
 
     finally:
         conn.close()
 
-def test2():
+def test_students():
     student_db()
     with sql.connect("students.db") as conn:
         cur = conn.cursor()
-        cur.execute("SELECT * FROM StudentGrades;")
+        cur.execute("SELECT * FROM StudentInfo;")
         print([d[0] for d in cur.description])
-        for row in cur.execute("SELECT * FROM StudentGrades;"):
+        for row in cur.execute("SELECT * FROM StudentInfo;"):
             print(row)
     
 
@@ -112,17 +116,24 @@ def earthquakes_db(db_file="earthquakes.db", data_file="us_earthquakes.csv"):
             with open(data_file, 'r') as infile:
                 rows = list(csv.reader(infile))
             cur.executemany("INSERT INTO USearthquakes VALUES (?,?,?,?,?,?,?,?,?)", rows)
+            cur.execute("DELETE FROM USEarthquakes WHERE Magnitude==0;")
+            cur.execute("UPDATE USEarthquakes SET Day=NULL WHERE Day==0;")
+            cur.execute("UPDATE USEarthquakes SET Hour=NULL WHERE Hour==0;")
+            cur.execute("UPDATE USEarthquakes SET Minute=NULL WHERE Minute==0;")
+            cur.execute("UPDATE USEarthquakes SET Second=NULL WHERE Second==0;")
 
     
     finally:
         conn.close()
 
-def test3():
+def test_earthquakes():
     earthquakes_db()
     with sql.connect("earthquakes.db") as conn:
         cur = conn.cursor()
         for row in cur.execute("SELECT * FROM USEarthquakes"):
             print(row)
+            if row[-1] == 0:
+                raise RuntimeError(row)
 
 # Problem 5
 def prob5(db_file="students.db"):
@@ -136,7 +147,25 @@ def prob5(db_file="students.db"):
     Returns:
         (list): the complete result set for the query.
     """
-    raise NotImplementedError("Problem 5 Incomplete")
+    A_students = []
+    try:
+        with sql.connect(db_file) as conn:
+            cur = conn.cursor()
+            A_students += cur.execute(  "SELECT SI.StudentName, CI.CourseName "
+                                        "FROM StudentInfo AS SI, CourseInfo AS CI, StudentGrades AS SG "
+                                        "WHERE SG.CourseID==CI.CourseID AND SI.StudentID==SG.StudentID AND SG.Grade=='A';")
+            
+            A_students += cur.execute(  "SELECT SI.StudentName, CI.CourseName "
+                                        "FROM StudentInfo AS SI, CourseInfo AS CI, StudentGrades AS SG "
+                                        "WHERE SG.CourseID==CI.CourseID AND SI.StudentID==SG.StudentID AND SG.Grade=='A+';")
+
+    
+    finally:
+        conn.close()
+    return A_students
+
+def test5():
+    prob5()
 
 
 # Problem 6
@@ -152,8 +181,41 @@ def prob6(db_file="earthquakes.db"):
     Returns:
         (float): The average magnitude of all earthquakes in the database.
     """
-    raise NotImplementedError("Problem 6 Incomplete")
+    magnitudes_19_century = []
+    magnitudes_20_century = []
+    all_magnitudes = []
+    try: 
+        with sql.connect(db_file) as conn:
+            cur = conn.cursor()
+            for mag in cur.execute("SELECT Magnitude FROM USEarthquakes WHERE Year>=1800 AND Year<1900;"):
+                magnitudes_19_century.append(mag[0])
+            for mag in cur.execute("SELECT Magnitude FROM USEarthquakes WHERE Year>=1900 AND Year<2000;"):
+                magnitudes_20_century.append(mag[0])
+            for mag in cur.execute("SELECT Magnitude FROM USEarthquakes;"):
+                all_magnitudes.append(mag[0])
+            
+
+    finally:
+        conn.close()
+
+    plt.subplot(121)
+    plt.hist(magnitudes_19_century)
+    plt.title("Earthquake Magnitudes in the 19th Century")
+    plt.xlabel("Magnitude")
+    plt.ylabel("Frequency")
+
+    plt.subplot(122)
+    plt.hist(magnitudes_20_century)
+    plt.title("Earthquake Magnitudes in the 20th Century")
+    plt.xlabel("Magnitude")
+    plt.ylabel("Frequency")
+
+    plt.show()
+    return np.mean(all_magnitudes)
+
 
 
 if __name__ == "__main__":
-    test3()
+    # test_earthquakes()
+    # print(prob6())
+    pass
