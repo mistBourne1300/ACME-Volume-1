@@ -5,7 +5,6 @@
 <Date>
 """
 
-from turtle import numinput
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import sparse
@@ -235,26 +234,30 @@ def prob7():
     and maxiter = 1000 with A and b generated with n=20. Plot the iterations
     computed as a function of omega.
     """
-    omegas = np.arange(1,1.95,step=.05)
-    num_itrs = []
+    omegas = np.arange(1,2,step=.05)
+    num_iters = []
     for w in omegas:
-        # print(f'omega: {w}',end = "\r")
+        print(f'{w:.2f}', end=":\n\t")
         u,converged,iter = hot_plate(20, w, tol = 1e-2, maxiter = 1000)
-        num_itrs.append(iter)
-    plt.plot(omegas, num_itrs)
+        print(f'{iter}')
+        num_iters.append(iter)
+    plt.plot(omegas, num_iters)
     plt.title("iterations vs omega")
     plt.xlabel("omega")
     plt.ylabel("iterations")
     plt.show()
+    return omegas[np.argmin(num_iters)]
 
 
 if __name__ == "__main__":
-    # n = 1000
+    # n = 100
     # A = diag_dom(n, as_sparse=True)
     # b = np.random.random(n)
+    # gauss_seidel(A,b,plot=True)
     # x, converge,iter = sor(A,b,1.3)
     # print(np.allclose(A@x,b))
     # print(converge, iter)
     
-    # print(hot_plate(20, 1, plot = True))
-    prob7()
+    # print(hot_plate(20, 1, tol = 1e-2, maxiter = 1000, plot = True))
+    # print(prob7())
+    pass
