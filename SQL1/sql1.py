@@ -217,5 +217,5 @@ def prob6(db_file="earthquakes.db"):
 
 if __name__ == "__main__":
     # test_earthquakes()
-    # print(prob6())
+    print(prob6())
     pass
