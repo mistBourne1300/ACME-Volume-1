@@ -46,9 +46,12 @@ def student_db(db_file="students.db", student_info="student_info.csv",
         student_grades (str): The name of a csv file containing data for the
             StudentGrades table.
     """
+    # open connection
     try:
         with sql.connect(db_file) as conn:
+            # get cursor
             cur = conn.cursor()
+            # execute commands
             cur.execute("DROP TABLE IF EXISTS MajorInfo;")
             cur.execute("DROP TABLE IF EXISTS CourseInfo;")
             cur.execute("DROP TABLE IF EXISTS StudentInfo;")
@@ -75,7 +78,7 @@ def student_db(db_file="students.db", student_info="student_info.csv",
             cur.executemany("INSERT INTO StudentGrades VALUES (?,?,?);", rows)
             cur.execute("UPDATE StudentInfo SET MajorID=NULL WHERE MajorID==-1;")
 
-
+    # close connection
     finally:
         conn.close()
 
@@ -108,9 +111,12 @@ def earthquakes_db(db_file="earthquakes.db", data_file="us_earthquakes.csv"):
         data_file (str): The name of a csv file containing data for the
             USEarthquakes table.
     """
+    # open connection
     try:
         with sql.connect(db_file) as conn:
+            # get cursor
             cur = conn.cursor()
+            # execute commands
             cur.execute("DROP TABLE IF EXISTS USEarthquakes;")
             cur.execute("CREATE TABLE USEarthquakes (Year INTEGER, Month INTEGER, Day INTEGER, Hour INTEGER, Minute INTEGER, Second INTEGER, Latitude REAL, Longitude REAL, Magnitude REAL);")
             with open(data_file, 'r') as infile:
@@ -122,7 +128,7 @@ def earthquakes_db(db_file="earthquakes.db", data_file="us_earthquakes.csv"):
             cur.execute("UPDATE USEarthquakes SET Minute=NULL WHERE Minute==0;")
             cur.execute("UPDATE USEarthquakes SET Second=NULL WHERE Second==0;")
 
-    
+    # close connection
     finally:
         conn.close()
 
@@ -147,10 +153,14 @@ def prob5(db_file="students.db"):
     Returns:
         (list): the complete result set for the query.
     """
+    # list of the A students
     A_students = []
+    # open connection
     try:
         with sql.connect(db_file) as conn:
+            # get cursor
             cur = conn.cursor()
+            # execute commands
             A_students += cur.execute(  "SELECT SI.StudentName, CI.CourseName "
                                         "FROM StudentInfo AS SI, CourseInfo AS CI, StudentGrades AS SG "
                                         "WHERE SG.CourseID==CI.CourseID AND SI.StudentID==SG.StudentID AND SG.Grade=='A';")
@@ -159,7 +169,7 @@ def prob5(db_file="students.db"):
                                         "FROM StudentInfo AS SI, CourseInfo AS CI, StudentGrades AS SG "
                                         "WHERE SG.CourseID==CI.CourseID AND SI.StudentID==SG.StudentID AND SG.Grade=='A+';")
 
-    
+    # close connection
     finally:
         conn.close()
     return A_students
@@ -181,12 +191,16 @@ def prob6(db_file="earthquakes.db"):
     Returns:
         (float): The average magnitude of all earthquakes in the database.
     """
+    # two lists for the magnitudes of the respective centuries and one to average over
     magnitudes_19_century = []
     magnitudes_20_century = []
     all_magnitudes = []
+    # open connection
     try: 
         with sql.connect(db_file) as conn:
+            # get cursor
             cur = conn.cursor()
+            # execute commands
             for mag in cur.execute("SELECT Magnitude FROM USEarthquakes WHERE Year>=1800 AND Year<1900;"):
                 magnitudes_19_century.append(mag[0])
             for mag in cur.execute("SELECT Magnitude FROM USEarthquakes WHERE Year>=1900 AND Year<2000;"):
@@ -194,10 +208,11 @@ def prob6(db_file="earthquakes.db"):
             for mag in cur.execute("SELECT Magnitude FROM USEarthquakes;"):
                 all_magnitudes.append(mag[0])
             
-
+    # close connection
     finally:
         conn.close()
 
+    # plot
     plt.subplot(121)
     plt.hist(magnitudes_19_century)
     plt.title("Earthquake Magnitudes in the 19th Century")

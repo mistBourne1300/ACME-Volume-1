@@ -18,12 +18,16 @@ def prob1(db_file="students.db"):
     Returns:
         (list): a list of strings, each of which is a student name.
     """
+    # open connection
     try:
         with sql.connect(db_file) as conn:
+            # get cursor
             cur = conn.cursor()
+            # execute commands
             tuples = cur.execute(   "SELECT SI.StudentName "
                                     "FROM StudentInfo AS SI INNER JOIN StudentGrades AS SG "
                                     "WHERE SI.StudentID == SG.StudentID AND SG.Grade == 'B';").fetchall()
+    # close connection
     finally:
         conn.close()
     return [t[0] for t in tuples]
@@ -41,9 +45,12 @@ def prob2(db_file="students.db"):
     Returns:
         (list): the complete result set for the query.
     """
+    # open connection
     try:
         with sql.connect(db_file) as conn:
+            # get cursor
             cur = conn.cursor()
+            # execute commands
             tuples = cur.execute(   "SELECT SI.StudentName, MI.MajorName, SG.Grade "
                                     "FROM StudentInfo AS SI LEFT OUTER JOIN MajorInfo AS MI "
                                     "ON SI.MajorID == MI.MajorID "
@@ -52,6 +59,7 @@ def prob2(db_file="students.db"):
                                     "INNER JOIN CourseInfo AS CI "
                                     "ON CI.CourseID == SG.CourseID "
                                     "WHERE CI.CourseName == 'Calculus';").fetchall()
+    # close connection
     finally:
         conn.close()
     return tuples
@@ -67,14 +75,18 @@ def prob3(db_file="students.db"):
     Returns:
         (list): a list of strings, each of which is a course name.
     """
+    # open connection
     try:
         with sql.connect(db_file) as conn:
+            # get cursor
             cur = conn.cursor()
+            # execute commands
             tuples = cur.execute(   "SELECT CI.CourseName "
                                     "FROM CourseInfo AS CI INNER JOIN StudentGrades AS SG "
                                     "ON SG.CourseID == CI.CourseID "
                                     "GROUP BY CI.CourseName "
                                     "HAVING COUNT(*) >= 5;").fetchall()
+    # close connection
     finally:
         conn.close()
     return [t[0] for t in tuples]
@@ -91,14 +103,18 @@ def prob4(db_file="students.db"):
     Returns:
         (list): the complete result set for the query.
     """
+    # open connection
     try:
         with sql.connect(db_file) as conn:
+            # get cursor
             cur = conn.cursor()
+            # execute commands
             tuples = cur.execute(   "SELECT MI.MajorName, COUNT(*) as num_students "
                                     "FROM StudentInfo as SI LEFT OUTER JOIN MajorInfo as MI "
                                     "ON SI.MajorID == MI.MajorID "
                                     "GROUP BY MI.MajorName "
                                     "ORDER BY num_students DESC, MI.MajorName ASC").fetchall()
+    # close connection
     finally:
         conn.close()
     return tuples
@@ -114,13 +130,17 @@ def prob5(db_file="students.db"):
     Returns:
         (list): the complete result set for the query.
     """
+    # open connection
     try:
         with sql.connect(db_file) as conn:
+            # get cursor
             cur = conn.cursor()
+            # execute commands
             tuples = cur.execute(   "SELECT SI.StudentName, MI.MajorName "
                                     "FROM StudentInfo AS SI LEFT OUTER JOIN MajorInfo AS MI "
                                     "ON SI.MajorID == MI.MajorID "
                                     "WHERE SI.StudentName LIKE '% C%'").fetchall()
+    # close connection
     finally:
         conn.close()
     return tuples
@@ -144,9 +164,12 @@ def prob6(db_file="students.db"):
     Returns:
         (list): the complete result set for the query.
     """
+    # open connection
     try:
         with sql.connect(db_file) as conn:
+            # get cursor
             cur = conn.cursor()
+            # execute commands
             tuples = cur.execute(   "SELECT SI.StudentName, COUNT(*) AS num_courses, AVG(SG.gradeisa) AS gpa "
                                     "FROM ("
                                         "SELECT StudentID, CASE Grade "
@@ -168,6 +191,7 @@ def prob6(db_file="students.db"):
                                     "ON SI.StudentID == SG.StudentID "
                                     "GROUP BY SI.StudentID "
                                     "ORDER BY gpa DESC").fetchall()
+    # close connection
     finally:
         conn.close()
     return tuples
