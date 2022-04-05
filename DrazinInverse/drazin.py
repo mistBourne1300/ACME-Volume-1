@@ -6,7 +6,6 @@
 """
 
 import numpy as np
-from pygame import K_2
 from scipy import linalg as la
 
 
@@ -95,7 +94,16 @@ def effective_resistance(A):
         ((n,n) ndarray) The matrix where the ijth entry is the effective
         resistance from node i to node j.
     """
-    raise NotImplementedError("Problem 3 Incomplete")
+    n,m = A.shape
+    laplacian = np.diag(A.sum(axis = 1)) - A
+    R = np.zeros(A.shape)
+    I = np.eye(A.shape[0])
+    for j in range(A.shape[0]):
+        Lj = laplacian.copy()
+        Lj[j,:] = I[j,:]
+        Ljd = drazin_inverse(Lj)
+        R[:,j] = np.diag(Ljd)
+    return R - I
 
 # Problems 4 and 5
 class LinkPredictor:
@@ -108,7 +116,22 @@ class LinkPredictor:
         Parameters:
             filename (str): The name of a file containing graph data.
         """
-        raise NotImplementedError("Problem 4 Incomplete")
+        names = set()
+        with open(filename) as file:
+            for line in file.readlines():
+                for name in line.strip().split(','):
+                    names.add(name)
+        self.names = list(names)
+        self.names.sort()
+        self.Adj = np.zeros((len(names),len(names)))
+        with open(filename) as file:
+            for line in file.readlines():
+                name1,name2 = line.strip().split(',')
+                i,j = self.names.index(name1), self.names.index(name2)
+                self.Adj[i,j] += 1
+                self.Adj[j,i] += 1
+        
+        self.ER = effective_resistance(A)
 
     def predict_link(self, node=None):
         """Predict the next link, either for the whole graph or for a
@@ -126,6 +149,16 @@ class LinkPredictor:
         Raises:
             ValueError: If node is not in the graph.
         """
+        if node:
+            ER = self.ER.copy()
+            Adj = self.Adj.copy()
+            i = self.names.index(node)
+            mask = Adj != 0
+            ER[mask] = 0
+            minimum = np.min(ER[i,:]!=0)
+            argmin = np.where(ER[i,:] == minimum)
+            return self.names[argmin]
+        print(np.argmin(self.ER))
         raise NotImplementedError("Problem 5 Incomplete")
 
     def add_link(self, node1, node2):
@@ -162,6 +195,18 @@ if __name__ == "__main__":
     print("PROBLEM 1:\n")
     print(f'A: {is_drazin(A,Ad,k_A)}')
     print(f'B: {is_drazin(B,Bd,k_B)}')
+
     print("\n\nPROBLEM 2:\n")
     print(f'A: {is_drazin(A,drazin_inverse(A),k_A)}')
     print(f'B: {is_drazin(B,drazin_inverse(B),k_B)}')
+
+    print("\n\nPROBLEM 3:\n")
+    graph1 = np.array([ [0,1,0,0],
+                        [1,0,1,0],
+                        [0,1,0,1],
+                        [0,0,1,0]])
+    print("graph 1:")
+    print(effective_resistance(graph1))
+
+    print("\n\nPROBLEM 4:\n")
+    print(LinkPredictor().predict_link('Melanie'))
